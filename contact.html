@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GlowAura | Contact</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            aura: {
+              bg: '#0F0D13',
+              card: 'rgba(255, 255, 255, 0.05)',
+              gold: '#E0C097',
+              goldHover: '#F3D5AC',
+              rose: '#D8A7B1',
+              cream: '#FDFBF7',
+              dark: '#0A080D'
+            }
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #05020f;
+      color: #FDFBF7;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    #galaxy-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(88, 28, 135, 0.45) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 85% 15%, rgba(30, 64, 175, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 80%, rgba(157, 23, 77, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 70% 55%, rgba(6, 182, 212, 0.18) 0%, transparent 45%),
+        radial-gradient(ellipse 50% 45% at 25% 70%, rgba(99, 102, 241, 0.22) 0%, transparent 50%),
+        linear-gradient(160deg, #05020f 0%, #0a0618 35%, #0d0820 65%, #060412 100%);
+      animation: galaxyShift 28s ease-in-out infinite alternate;
+    }
+
+    @keyframes galaxyShift {
+      0% { filter: hue-rotate(0deg) brightness(1); }
+      100% { filter: hue-rotate(18deg) brightness(1.08); }
+    }
+
+    #galaxy-stars { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .galaxy-star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+      animation: starTwinkle var(--dur, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      opacity: var(--opacity, 0.7);
+    }
+
+    .galaxy-star.dim { background: #c4b5fd; box-shadow: 0 0 6px rgba(167, 139, 250, 0.7); }
+    .galaxy-star.cyan { background: #a5f3fc; box-shadow: 0 0 6px rgba(103, 232, 249, 0.75); }
+    .galaxy-star.rose { background: #fbcfe8; box-shadow: 0 0 6px rgba(244, 114, 182, 0.7); }
+
+    @keyframes starTwinkle {
+      0%, 100% { opacity: var(--opacity, 0.7); transform: scale(1); }
+      50% { opacity: calc(var(--opacity, 0.7) * 0.25); transform: scale(0.65); }
+    }
+
+    .galaxy-nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: nebulaDrift 22s ease-in-out infinite alternate;
+    }
+
+    .galaxy-nebula.n1 {
+      width: 42vw; height: 42vw; top: -8%; left: -5%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.55) 0%, transparent 70%);
+      animation-duration: 26s;
+    }
+    .galaxy-nebula.n2 {
+      width: 36vw; height: 36vw; top: 10%; right: -8%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%);
+      animation-duration: 20s; animation-delay: -4s;
+    }
+    .galaxy-nebula.n3 {
+      width: 48vw; height: 38vw; bottom: -12%; left: 20%;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%);
+      animation-duration: 24s; animation-delay: -8s;
+    }
+    .galaxy-nebula.n4 {
+      width: 28vw; height: 28vw; top: 45%; left: 55%;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, transparent 70%);
+      animation-duration: 18s; animation-delay: -2s;
+    }
+
+    @keyframes nebulaDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(3%, -4%) scale(1.08); }
+    }
+
+    .content-layer { position: relative; z-index: 10; }
+
+    .glass-panel {
+      background: rgba(20, 16, 26, 0.65);
+      border: 1px solid rgba(224, 192, 151, 0.18);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .info-card {
+      background: rgba(20, 16, 26, 0.55);
+      border: 1px solid rgba(224, 192, 151, 0.12);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.35s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .info-card:hover {
+      border-color: rgba(224, 192, 151, 0.4);
+      transform: translateY(-4px);
+    }
+
+    .info-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(224, 192, 151, 0.12);
+      border: 1px solid rgba(224, 192, 151, 0.25);
+      color: #E0C097;
+      margin-bottom: 16px;
+    }
+
+    .contact-form input,
+    .contact-form select,
+    .contact-form textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 10px;
+      border: 1px solid rgba(224, 192, 151, 0.25);
+      background: rgba(10, 8, 13, 0.6);
+      color: #FDFBF7;
+      outline: none;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color 0.25s ease;
+    }
+
+    .contact-form input:focus,
+    .contact-form select:focus,
+    .contact-form textarea:focus {
+      border-color: #E0C097;
+    }
+
+    .contact-form select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23E0C097' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      padding-right: 40px;
+    }
+
+    .contact-form label {
+      display: block;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(253, 251, 247, 0.5);
+      margin-bottom: 8px;
+    }
+
+    .contact-form textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px 28px;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #E0C097 0%, #B88E5E 100%);
+      color: #0A080D;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      box-shadow: 0 0 25px rgba(224, 192, 151, 0.45);
+    }
+
+    #toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast {
+      background: rgba(15, 13, 19, 0.95);
+      border: 1px solid #E0C097;
+      color: #FDFBF7;
+      padding: 14px 28px;
+      border-radius: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
+      font-size: 0.95rem;
+      animation: toastIn 0.4s ease forwards, toastOut 0.4s ease 2.6s forwards;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    @keyframes toastIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes toastOut {
+      from { opacity: 1; transform: translateY(0); }
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+
+    .faq-item {
+      border-bottom: 1px solid rgba(224, 192, 151, 0.15);
+      padding: 20px 0;
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-q {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      background: none;
+      border: none;
+      color: #FDFBF7;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.35rem;
+      text-align: left;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .faq-q i {
+      color: #E0C097;
+      font-size: 0.85rem;
+      transition: transform 0.3s ease;
+    }
+
+    .faq-item.open .faq-q i { transform: rotate(180deg); }
+
+    .faq-a {
+      display: none;
+      margin-top: 12px;
+      color: rgba(253, 251, 247, 0.65);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .faq-item.open .faq-a { display: block; }
+  </style>
+</head>
+<body class="relative min-h-screen">
+
+  <div id="galaxy-bg" aria-hidden="true">
+    <div class="galaxy-nebula n1"></div>
+    <div class="galaxy-nebula n2"></div>
+    <div class="galaxy-nebula n3"></div>
+    <div class="galaxy-nebula n4"></div>
+    <div id="galaxy-stars"></div>
+  </div>
+
+  <div class="content-layer">
+    <header class="sticky top-0 z-50 border-b border-aura-gold/15 bg-aura-dark/70 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <span class="text-aura-gold text-2xl group-hover:rotate-180 transition-transform duration-700">❀</span>
+          <div class="flex flex-col">
+            <span class="font-serif text-2xl tracking-wider text-aura-cream font-medium uppercase">GlowAura</span>
+            <span class="text-[9px] tracking-[0.25em] text-aura-rose uppercase -mt-1">Beauty · Skin · You</span>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-[0.25em] text-aura-cream/80">
+          <a href="index.html#hero" class="hover:text-aura-gold transition-colors">Experience</a>
+          <a href="index.html#shop" class="hover:text-aura-gold transition-colors">Bestsellers</a>
+          <a href="about.html" class="hover:text-aura-gold transition-colors">Our Story</a>
+          <a href="contact.html" class="text-aura-gold">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-5 text-aura-gold">
+          <button class="hover:text-aura-cream transition-colors p-2" aria-label="Search"><i class="fas fa-search text-lg"></i></button>
+          <button class="hover:text-aura-cream transition-colors p-2 relative" aria-label="Cart">
+            <i class="fas fa-shopping-bag text-lg"></i>
+            <span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-aura-rose"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-6 py-10 md:py-16">
+      <div class="mb-12 text-center max-w-2xl mx-auto">
+        <span class="text-aura-rose uppercase tracking-[0.3em] text-xs font-semibold">Get In Touch</span>
+        <h1 class="mt-4 font-serif text-5xl md:text-6xl text-aura-cream leading-tight">
+          We’re here to <em class="text-aura-gold italic">help</em>
+        </h1>
+        <p class="mt-5 text-aura-cream/65 text-base leading-relaxed">
+          Questions about orders, ingredients, or your glow ritual? Send a message — our team replies within 1–2 business days.
+        </p>
+      </div>
+
+      <div class="grid gap-6 md:grid-cols-3 mb-14">
+        <div class="info-card">
+          <div class="info-icon"><i class="fas fa-envelope"></i></div>
+          <h3 class="font-serif text-2xl text-aura-cream mb-2">Email</h3>
+          <p class="text-sm text-aura-cream/60 mb-3">For orders &amp; product questions</p>
+          <a href="mailto:hello@glowaura.com" class="text-aura-gold text-sm hover:text-aura-goldHover">hello@glowaura.com</a>
+        </div>
+        <div class="info-card">
+          <div class="info-icon"><i class="fas fa-clock"></i></div>
+          <h3 class="font-serif text-2xl text-aura-cream mb-2">Hours</h3>
+          <p class="text-sm text-aura-cream/60 mb-1">Mon–Fri · 9am – 6pm EST</p>
+          <p class="text-sm text-aura-cream/60">Sat · 10am – 4pm EST</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon"><i class="fas fa-map-marker-alt"></i></div>
+          <h3 class="font-serif text-2xl text-aura-cream mb-2">Studio</h3>
+          <p class="text-sm text-aura-cream/60">148 Radiance Lane<br>New York, NY 10012</p>
+        </div>
+      </div>
+
+      <section class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start mb-20">
+        <div class="glass-panel rounded-[28px] p-6 md:p-10">
+          <h2 class="font-serif text-3xl md:text-4xl text-aura-cream mb-2">Send a message</h2>
+          <p class="text-aura-cream/60 text-sm mb-8">Fill out the form and we’ll get back to you soon.</p>
+
+          <form class="contact-form space-y-5" onsubmit="handleContact(event)">
+            <div class="grid gap-5 sm:grid-cols-2">
+              <div>
+                <label for="name">Name</label>
+                <input id="name" type="text" name="name" placeholder="Your name" required />
+              </div>
+              <div>
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" placeholder="you@email.com" required />
+              </div>
+            </div>
+
+            <div>
+              <label for="topic">Topic</label>
+              <select id="topic" name="topic" required>
+                <option value="">Select a topic</option>
+                <option value="order">Order status</option>
+                <option value="product">Product question</option>
+                <option value="returns">Returns &amp; exchanges</option>
+                <option value="press">Press &amp; partnerships</option>
+                <option value="other">Something else</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="message">Message</label>
+              <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-submit">Send Message</button>
+          </form>
+        </div>
+
+        <div>
+          <div class="glass-panel rounded-[28px] p-6 md:p-8 mb-6">
+            <h2 class="font-serif text-3xl text-aura-cream mb-6">Quick answers</h2>
+
+            <div class="faq-item open">
+              <button class="faq-q" type="button" onclick="toggleFaq(this)">
+                How long does shipping take?
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-a">Standard shipping is 3–5 business days. Express arrives in 1–2 business days. Free shipping on orders over $50.</div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-q" type="button" onclick="toggleFaq(this)">
+                What’s your return policy?
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-a">We offer free returns within 30 days of delivery on unopened products. Contact us with your order number to start a return.</div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-q" type="button" onclick="toggleFaq(this)">
+                Are your products vegan?
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-a">Yes — every GlowAura formula is vegan, cruelty-free, and free from parabens, sulfates, and synthetic fragrances.</div>
+            </div>
+
+            <div class="faq-item">
+              <button class="faq-q" type="button" onclick="toggleFaq(this)">
+                Can I track my order?
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="faq-a">You’ll receive a tracking link by email once your order ships. You can also reply to that email if you need help.</div>
+            </div>
+          </div>
+
+          <div class="glass-panel rounded-[28px] p-6 md:p-8 text-center">
+            <p class="text-xs uppercase tracking-[0.25em] text-aura-rose mb-3">Prefer social?</p>
+            <p class="text-aura-cream/65 text-sm mb-5">Message us anytime on Instagram</p>
+            <a href="#" class="inline-flex items-center gap-2 text-aura-gold text-sm uppercase tracking-[0.15em] hover:text-aura-goldHover">
+              <i class="fab fa-instagram"></i> @glowaura
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-10 border-t border-aura-gold/15 bg-aura-dark/95 text-aura-cream">
+      <div class="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <span class="text-aura-gold text-2xl">❀</span>
+            <div class="flex flex-col">
+              <span class="font-serif text-2xl uppercase">GlowAura</span>
+              <span class="text-[8px] tracking-[0.2em] text-aura-rose uppercase">Beauty · Skin · You</span>
+            </div>
+          </div>
+          <p class="mt-4 text-sm leading-7 text-aura-cream/65">Clean, conscious beauty designed to nourish skin and elevate your ritual.</p>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Shop</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="index.html#shop" class="hover:text-aura-gold">Bestsellers</a></li>
+            <li><a href="product.html" class="hover:text-aura-gold">Silk Glow Foundation</a></li>
+            <li><a href="index.html" class="hover:text-aura-gold">All Products</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Company</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="about.html" class="hover:text-aura-gold">Our Story</a></li>
+            <li><a href="contact.html" class="hover:text-aura-gold">Contact</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Sustainability</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Support</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="contact.html" class="hover:text-aura-gold">Shipping</a></li>
+            <li><a href="contact.html" class="hover:text-aura-gold">Returns</a></li>
+            <li><a href="contact.html" class="hover:text-aura-gold">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script>
+    (function initGalaxyStars() {
+      const host = document.getElementById('galaxy-stars');
+      if (!host) return;
+      const cols = 14, rows = 10;
+      const variants = ['', 'dim', 'cyan', 'rose'];
+      let i = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const star = document.createElement('span');
+          const variant = variants[i % variants.length];
+          star.className = 'galaxy-star' + (variant ? ' ' + variant : '');
+          const jitterX = (Math.random() - 0.5) * (100 / cols) * 0.55;
+          const jitterY = (Math.random() - 0.5) * (100 / rows) * 0.55;
+          star.style.left = ((col + 0.5) / cols) * 100 + jitterX + '%';
+          star.style.top = ((row + 0.5) / rows) * 100 + jitterY + '%';
+          const size = 1.2 + Math.random() * 2.4;
+          star.style.width = size + 'px';
+          star.style.height = size + 'px';
+          star.style.setProperty('--opacity', (0.35 + Math.random() * 0.65).toFixed(2));
+          star.style.setProperty('--dur', (2.2 + Math.random() * 3.5).toFixed(2) + 's');
+          star.style.setProperty('--delay', (Math.random() * 4).toFixed(2) + 's');
+          host.appendChild(star);
+          i++;
+        }
+      }
+    })();
+
+    function triggerToast(message) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.innerHTML = '<i class="fas fa-sparkles text-aura-gold"></i> ' + message;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function handleContact(e) {
+      e.preventDefault();
+      triggerToast('Message sent — we’ll reply soon ✨');
+      e.target.reset();
+    }
+
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach((el) => el.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    }
+  </script>
+</body>
+</html>

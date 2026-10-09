@@ -1,0 +1,1998 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GlowAura | 3D Luxury Skincare & Beauty</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome & Google Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              aura: {
+                bg: '#0F0D13',
+                card: 'rgba(255, 255, 255, 0.05)',
+                gold: '#E0C097',
+                goldHover: '#F3D5AC',
+                rose: '#D8A7B1',
+                cream: '#FDFBF7',
+                dark: '#0A080D'
+              }
+            },
+            fontFamily: {
+              serif: ['Cormorant Garamond', 'serif'],
+              sans: ['Plus Jakarta Sans', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+
+    <style>
+        body {
+            background-color: #05020f;
+            color: #FDFBF7;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Galaxy + stars behind the 3D canvas */
+        #galaxy-bg {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% 20%, rgba(88, 28, 135, 0.45) 0%, transparent 55%),
+                radial-gradient(ellipse 70% 50% at 85% 15%, rgba(30, 64, 175, 0.4) 0%, transparent 50%),
+                radial-gradient(ellipse 90% 70% at 50% 80%, rgba(157, 23, 77, 0.28) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 40% at 70% 55%, rgba(6, 182, 212, 0.18) 0%, transparent 45%),
+                radial-gradient(ellipse 50% 45% at 25% 70%, rgba(99, 102, 241, 0.22) 0%, transparent 50%),
+                linear-gradient(160deg, #05020f 0%, #0a0618 35%, #0d0820 65%, #060412 100%);
+            animation: galaxyShift 28s ease-in-out infinite alternate;
+        }
+
+        @keyframes galaxyShift {
+            0% {
+                filter: hue-rotate(0deg) brightness(1);
+                background-position: 0% 0%, 100% 0%, 50% 100%, 70% 50%, 25% 70%, 0 0;
+            }
+            100% {
+                filter: hue-rotate(18deg) brightness(1.08);
+                background-position: 8% 5%, 92% 8%, 45% 95%, 65% 58%, 30% 65%, 0 0;
+            }
+        }
+
+        #galaxy-stars {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .galaxy-star {
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+            animation: starTwinkle var(--dur, 3s) ease-in-out infinite;
+            animation-delay: var(--delay, 0s);
+            opacity: var(--opacity, 0.7);
+        }
+
+        .galaxy-star.dim {
+            background: #c4b5fd;
+            box-shadow: 0 0 6px rgba(167, 139, 250, 0.7);
+        }
+
+        .galaxy-star.cyan {
+            background: #a5f3fc;
+            box-shadow: 0 0 6px rgba(103, 232, 249, 0.75);
+        }
+
+        .galaxy-star.rose {
+            background: #fbcfe8;
+            box-shadow: 0 0 6px rgba(244, 114, 182, 0.7);
+        }
+
+        @keyframes starTwinkle {
+            0%, 100% { opacity: var(--opacity, 0.7); transform: scale(1); }
+            50% { opacity: calc(var(--opacity, 0.7) * 0.25); transform: scale(0.65); }
+        }
+
+        .galaxy-nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.35;
+            animation: nebulaDrift 22s ease-in-out infinite alternate;
+        }
+
+        .galaxy-nebula.n1 {
+            width: 42vw;
+            height: 42vw;
+            top: -8%;
+            left: -5%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.55) 0%, transparent 70%);
+            animation-duration: 26s;
+        }
+
+        .galaxy-nebula.n2 {
+            width: 36vw;
+            height: 36vw;
+            top: 10%;
+            right: -8%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%);
+            animation-duration: 20s;
+            animation-delay: -4s;
+        }
+
+        .galaxy-nebula.n3 {
+            width: 48vw;
+            height: 38vw;
+            bottom: -12%;
+            left: 20%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%);
+            animation-duration: 24s;
+            animation-delay: -8s;
+        }
+
+        .galaxy-nebula.n4 {
+            width: 28vw;
+            height: 28vw;
+            top: 45%;
+            left: 55%;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, transparent 70%);
+            animation-duration: 18s;
+            animation-delay: -2s;
+        }
+
+        @keyframes nebulaDrift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(3%, -4%) scale(1.08); }
+        }
+
+        /* Fixed Background 3D Canvas */
+        #bg-canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* Glassmorphic Cards */
+        .glass-panel {
+            background: rgba(20, 16, 26, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(224, 192, 151, 0.18);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(224, 192, 151, 0.4);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Values Marquee */
+        .values-strip {
+            background: rgba(224, 192, 151, 0.06);
+            border-y: 1px solid rgba(224, 192, 151, 0.15);
+            padding: 18px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .marquee {
+            display: inline-flex;
+            align-items: center;
+            animation: scroll 35s linear infinite;
+        }
+
+        .marquee-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #E0C097;
+            padding: 0 24px;
+            font-weight: 500;
+        }
+
+        .marquee-item i {
+            font-size: 1.1rem;
+            color: #D8A7B1;
+        }
+
+        .dot {
+            width: 6px;
+            height: 6px;
+            background-radius: 50%;
+            background-color: rgba(224, 192, 151, 0.4);
+            border-radius: 50%;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Bestsellers Section */
+        .bestsellers, .categories, .brand-story, .testimonials, .instagram-section, .newsletter-section {
+            padding: 90px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .section-heading .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            font-size: 0.85rem;
+            color: #D8A7B1;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .section-heading h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 400;
+            color: #FDFBF7;
+        }
+
+        .section-heading h2 em {
+            font-style: italic;
+            color: #E0C097;
+        }
+
+        .section-heading p {
+            color: rgba(253, 251, 247, 0.65);
+            max-width: 580px;
+            margin: 12px auto 0;
+            font-size: 1rem;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 28px;
+        }
+
+        .product-card {
+            background: rgba(20, 16, 26, 0.7);
+            border: 1px solid rgba(224, 192, 151, 0.12);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.35s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .product-card:hover {
+            border-color: rgba(224, 192, 151, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 16px 36px rgba(0,0,0,0.5);
+        }
+
+        .product-card-image {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            margin-bottom: 16px;
+            background: #181420;
+        }
+
+        .product-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .product-card-image img {
+            transform: scale(1.08);
+        }
+
+        .product-tag {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(15, 13, 19, 0.85);
+            border: 1px solid rgba(224, 192, 151, 0.3);
+            color: #E0C097;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            backdrop-filter: blur(4px);
+        }
+
+        .product-card h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #FDFBF7;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            color: rgba(253, 251, 247, 0.5);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .product-price-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .price {
+            font-weight: 600;
+            font-size: 1.25rem;
+            color: #E0C097;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: rgba(253, 251, 247, 0.4);
+            font-size: 0.95rem;
+        }
+
+        .stars {
+            color: #E0C097;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .btn-add {
+            margin-top: auto;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #E0C097 0%, #B88E5E 100%);
+            color: #0A080D;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-add:hover {
+            background: linear-gradient(135deg, #F3D5AC 0%, #CFA370 100%);
+            box-shadow: 0 0 20px rgba(224, 192, 151, 0.35);
+        }
+
+        .view-all-wrap {
+            text-align: center;
+            margin-top: 48px;
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 32px;
+            border-radius: 30px;
+            border: 1px solid rgba(224, 192, 151, 0.4);
+            color: #E0C097;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+            background: rgba(20, 16, 26, 0.4);
+        }
+
+        .btn-outline:hover {
+            background: rgba(224, 192, 151, 0.15);
+            border-color: #E0C097;
+            color: #FFF;
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        .category-card {
+            position: relative;
+            height: 380px;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid rgba(224, 192, 151, 0.15);
+        }
+
+        .category-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+
+        .category-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .category-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(10, 8, 13, 0.9) 0%, rgba(10, 8, 13, 0.2) 60%, transparent 100%);
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .cat-count {
+            font-size: 0.8rem;
+            color: #D8A7B1;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 6px;
+        }
+
+        .category-overlay h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: #FDFBF7;
+            margin-bottom: 12px;
+        }
+
+        .cat-link {
+            color: #E0C097;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: gap 0.3s ease;
+        }
+
+        .category-card:hover .cat-link {
+            gap: 14px;
+            color: #FFF;
+        }
+
+        /* Brand Story */
+        .brand-story-inner {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        @media (max-width: 868px) {
+            .brand-story-inner { grid-template-columns: 1fr; }
+        }
+
+        .brand-story-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(224, 192, 151, 0.2);
+        }
+
+        .brand-story-image img {
+            width: 100%;
+            height: 480px;
+            object-fit: cover;
+        }
+
+        .brand-story-badge {
+            position: absolute;
+            bottom: 24px;
+            right: 24px;
+            background: rgba(15, 13, 19, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(224, 192, 151, 0.3);
+            border-radius: 16px;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .badge-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            color: #E0C097;
+            font-weight: 600;
+            line-height: 1;
+        }
+
+        .badge-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(253, 251, 247, 0.8);
+            line-height: 1.3;
+        }
+
+        .brand-story-content h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            margin: 12px 0 20px;
+            line-height: 1.2;
+        }
+
+        .brand-story-content h2 em {
+            color: #E0C097;
+            font-style: italic;
+        }
+
+        .brand-story-content p {
+            color: rgba(253, 251, 247, 0.7);
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+
+        .brand-story-stats {
+            display: flex;
+            gap: 36px;
+            margin: 32px 0;
+            padding-top: 24px;
+            border-top: 1px solid rgba(224, 192, 151, 0.15);
+        }
+
+        .stat-num {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2rem;
+            color: #E0C097;
+            display: block;
+            font-weight: 600;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(253, 251, 247, 0.6);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Testimonials */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 28px;
+        }
+
+        .testimonial-card {
+            background: rgba(20, 16, 26, 0.65);
+            border: 1px solid rgba(224, 192, 151, 0.12);
+            border-radius: 16px;
+            padding: 32px;
+            position: relative;
+            backdrop-filter: blur(10px);
+        }
+
+        .testimonial-quote {
+            position: absolute;
+            top: 16px;
+            right: 24px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 5rem;
+            color: rgba(224, 192, 151, 0.15);
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            color: rgba(253, 251, 247, 0.8);
+            line-height: 1.6;
+            margin: 16px 0 24px;
+            font-size: 0.95rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .testimonial-author img {
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #E0C097;
+        }
+
+        .author-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #FDFBF7;
+        }
+
+        .author-role {
+            font-size: 0.78rem;
+            color: #D8A7B1;
+        }
+
+        /* Instagram Section */
+        .instagram-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 16px;
+        }
+
+        .insta-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            aspect-ratio: 1;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .insta-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .insta-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(15, 13, 19, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-size: 1.8rem;
+            color: #E0C097;
+        }
+
+        .insta-item:hover img { transform: scale(1.1); }
+        .insta-item:hover .insta-overlay { opacity: 1; }
+
+        .insta-cta {
+            text-align: center;
+            margin-top: 36px;
+        }
+
+        .insta-cta a {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #E0C097;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 10px 24px;
+            border-radius: 20px;
+            border: 1px solid rgba(224, 192, 151, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .insta-cta a:hover {
+            background: rgba(224, 192, 151, 0.1);
+            border-color: #E0C097;
+        }
+
+        /* Newsletter */
+        .newsletter-section {
+            background: linear-gradient(135deg, rgba(30, 24, 38, 0.8) 0%, rgba(15, 13, 19, 0.9) 100%);
+            border: 1px solid rgba(224, 192, 151, 0.2);
+            border-radius: 24px;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 80px;
+            backdrop-filter: blur(12px);
+        }
+
+        .newsletter-section h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .newsletter-section h2 em { color: #E0C097; font-style: italic; }
+
+        .newsletter-section p {
+            color: rgba(253, 251, 247, 0.7);
+            max-width: 520px;
+            margin: 0 auto 32px;
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 480px;
+            margin: 0 auto;
+            gap: 12px;
+        }
+
+        @media (max-width: 540px) {
+            .newsletter-form { flex-direction: column; }
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(224, 192, 151, 0.25);
+            background: rgba(10, 8, 13, 0.6);
+            color: #FDFBF7;
+            outline: none;
+        }
+
+        .newsletter-form input:focus {
+            border-color: #E0C097;
+        }
+
+        .newsletter-form button {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #E0C097 0%, #B88E5E 100%);
+            color: #0A080D;
+            font-weight: 600;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-form button:hover {
+            box-shadow: 0 0 20px rgba(224, 192, 151, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid rgba(224, 192, 151, 0.15);
+            background: rgba(10, 8, 13, 0.95);
+            padding: 70px 24px 30px;
+        }
+
+        .footer-inner {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        @media (max-width: 900px) {
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 540px) {
+            .footer-inner { grid-template-columns: 1fr; }
+        }
+
+        .footer-brand p {
+            color: rgba(253, 251, 247, 0.6);
+            margin: 18px 0;
+            max-width: 320px;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 16px;
+        }
+
+        .footer-socials a {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid rgba(224, 192, 151, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #E0C097;
+            transition: all 0.3s ease;
+        }
+
+        .footer-socials a:hover {
+            background: #E0C097;
+            color: #0A080D;
+        }
+
+        .footer-col h4 {
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #E0C097;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul a {
+            color: rgba(253, 251, 247, 0.65);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col ul a:hover {
+            color: #E0C097;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: rgba(253, 251, 247, 0.45);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .legal-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .legal-links a:hover { color: #E0C097; }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(20, 16, 26, 0.85);
+            border: 1px solid rgba(224, 192, 151, 0.4);
+            color: #E0C097;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 90;
+            backdrop-filter: blur(8px);
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: #E0C097;
+            color: #0A080D;
+            transform: translateY(-4px);
+        }
+
+        /* Toast Popup */
+        #toast-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: rgba(15, 13, 19, 0.95);
+            border: 1px solid #E0C097;
+            color: #FDFBF7;
+            padding: 14px 28px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            backdrop-filter: blur(12px);
+            font-size: 0.95rem;
+            animation: toastIn 0.4s ease forwards, toastOut 0.4s ease 2.6s forwards;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="relative min-h-screen">
+
+    <!-- Galaxy colors + stars (behind Three.js) -->
+    <div id="galaxy-bg" aria-hidden="true">
+        <div class="galaxy-nebula n1"></div>
+        <div class="galaxy-nebula n2"></div>
+        <div class="galaxy-nebula n3"></div>
+        <div class="galaxy-nebula n4"></div>
+        <div id="galaxy-stars"></div>
+    </div>
+
+    <!-- 3D Rotating Display Background Canvas -->
+    <div id="bg-canvas-container"></div>
+
+    <!-- MAIN CONTENT WRAPPER -->
+    <div class="content-layer">
+
+        <!-- HEADER NAVIGATION -->
+        <header class="sticky top-0 z-50 transition-all duration-300 backdrop-blur-md bg-aura-dark/70 border-b border-aura-gold/15">
+            <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+                <a href="#" class="flex items-center gap-3 group">
+                    <span class="text-aura-gold text-2xl group-hover:rotate-180 transition-transform duration-700">❀</span>
+                    <div class="flex flex-col">
+                        <span class="font-serif text-2xl tracking-wider text-aura-cream font-medium uppercase">GlowAura</span>
+                        <span class="text-[9px] tracking-[0.25em] text-aura-rose uppercase -mt-1">Beauty · Skin · You</span>
+                    </div>
+                </a>
+
+                <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-widest text-aura-cream/80">
+                    <a href="#hero" class="hover:text-aura-gold transition-colors">Experience</a>
+                    <a href="#shop" class="hover:text-aura-gold transition-colors">Bestsellers</a>
+                    <a href="#values" class="hover:text-aura-gold transition-colors">Values</a>
+                    <a href="about.html" class="hover:text-aura-gold transition-colors">Our Story</a>
+                    <a href="contact.html" class="hover:text-aura-gold transition-colors">Contact</a>
+                </nav>
+
+                <div class="flex items-center gap-5 text-aura-gold">
+                    <button class="hover:text-aura-cream transition-colors p-2" aria-label="Search"><i class="fas fa-search text-lg"></i></button>
+                    <button class="hover:text-aura-cream transition-colors p-2 relative" onclick="triggerToast('Bag opened (0 items)')" aria-label="Cart">
+                        <i class="fas fa-shopping-bag text-lg"></i>
+                        <span class="absolute top-1 right-1 w-2 h-2 bg-aura-rose rounded-full"></span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="min-h-[85vh] flex items-center justify-between px-6 max-w-7xl mx-auto py-12 relative">
+            <div class="max-w-xl">
+                <span class="text-aura-rose uppercase tracking-[0.3em] text-xs font-semibold mb-3 block">Pure Botanical Alchemy</span>
+                <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl leading-tight mb-6 text-aura-cream">
+                    Unveil Your <br><em class="text-aura-gold font-serif italic">Radiant Glow</em>
+                </h1>
+                <p class="text-aura-cream/70 text-base sm:text-lg mb-8 leading-relaxed">
+                    Experience our award-winning trio of clean formulations. Hand-crafted with rare botanical elixirs, gently resting on illuminated marble for timeless elegance.
+                </p>
+                <div class="flex flex-wrap items-center gap-4">
+                    <a href="shop.html" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-aura-gold to-yellow-600 text-aura-dark font-semibold tracking-wider uppercase text-xs hover:shadow-[0_0_25px_rgba(224,192,151,0.5)] transition-all">
+                        Explore Collection
+                    </a>
+                    <a href="about.html" class="px-8 py-3.5 rounded-full border border-aura-gold/40 text-aura-gold uppercase tracking-wider text-xs hover:bg-aura-gold/10 transition-all">
+                        Watch Story
+                    </a>
+                </div>
+            </div>
+
+            <!-- HERO INTERACTIVE PRODUCT CARD -->
+            <div class="hidden lg:block w-80 glass-panel p-6 rounded-2xl">
+                <div class="flex items-center justify-between border-b border-aura-gold/20 pb-3 mb-4">
+                    <span class="text-xs uppercase tracking-widest text-aura-rose">Rotating Showcase</span>
+                    <span class="text-xs text-aura-gold font-mono">360° View</span>
+                </div>
+                <h3 id="cardTitle" class="font-serif text-2xl text-aura-cream mb-1">Radiance Silk Serum</h3>
+                <span id="cardVolume" class="text-xs text-aura-gold/80 block mb-3 font-mono">50ml / 1.7 fl. oz.</span>
+                <p id="cardDesc" class="text-xs text-aura-cream/70 leading-relaxed mb-4">
+                    Infused with organic rosehip and 24k gold flakes for deeply nourished, glowing skin.
+                </p>
+                <div class="flex items-center justify-between">
+                    <span id="cardPrice" class="font-semibold text-xl text-aura-gold">$88.00</span>
+                    <button onclick="triggerToast('Added Radiance Silk Serum to bag ✨')" class="px-4 py-2 rounded-lg bg-aura-gold/20 text-aura-gold border border-aura-gold/40 hover:bg-aura-gold hover:text-aura-dark text-xs uppercase tracking-wider transition-all">
+                        Add to Bag
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- VALUES MARQUEE -->
+        <section class="values-strip" id="values">
+            <div class="marquee">
+                <div class="marquee-item"><i class="fas fa-leaf"></i> Clean Beauty</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-flask"></i> Dermatologist Tested</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-rabbit"></i> 100% Cruelty-Free</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-recycle"></i> Sustainable Packaging</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-seedling"></i> Vegan Formulas</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-leaf"></i> Clean Beauty</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-flask"></i> Dermatologist Tested</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-rabbit"></i> 100% Cruelty-Free</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-recycle"></i> Sustainable Packaging</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+                <div class="marquee-item"><i class="fas fa-seedling"></i> Vegan Formulas</div>
+                <div class="marquee-item"><span class="dot"></span></div>
+            </div>
+        </section>
+
+        <!-- BESTSELLERS -->
+        <section class="bestsellers" id="shop">
+            <div class="section-heading">
+                <span class="eyebrow">Loved By Thousands</span>
+                <h2>Our <em>Bestsellers</em></h2>
+                <p>Handpicked favorites that deliver visible results — trusted by skincare lovers worldwide.</p>
+            </div>
+
+            <div class="product-grid">
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <span class="product-tag">Bestseller</span>
+                        <img src="https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=600&auto=format&fit=crop" alt="Silk Glow Foundation">
+                    </div>
+                    <h3>Silk Glow Foundation</h3>
+                    <div class="product-category">Face · Foundation</div>
+                    <div class="product-price-row">
+                        <span class="price">Ksh 542.00</span>
+                        <span class="old-price">Ksh 652.00</span>
+                    </div>
+                    <div class="stars">★★★★★ <span style="color:#a87b8f;">(1,247)</span></div>
+                    <button class="btn-add" onclick="triggerToast('Silk Glow Foundation added to bag ✨')">Add to Bag</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <span class="product-tag">New</span>
+                        <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=600&auto=format&fit=crop" alt="Velvet Matte Lipstick">
+                    </div>
+                    <h3>Velvet Matte Lip</h3>
+                    <div class="product-category">Lips · Lipstick</div>
+                    <div class="product-price-row">
+                        <span class="price">Ksh 726.00</span>
+                    </div>
+                    <div class="stars">★★★★★ <span style="color:#a87b8f;">(892)</span></div>
+                    <button class="btn-add" onclick="triggerToast('Velvet Matte Lip added to bag ✨')">Add to Bag</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <span class="product-tag">Vegan</span>
+                        <img src="https://images.unsplash.com/photo-1590156206657-7952b4e7a5b6?q=80&w=600&auto=format&fit=crop" alt="Rose Quartz Highlighter">
+                    </div>
+                    <h3>Rose Quartz Highlighter</h3>
+                    <div class="product-category">Face · Highlighter</div>
+                    <div class="product-price-row">
+                        <span class="price">Ksh 834.00</span>
+                    </div>
+                    <div class="stars">★★★★☆ <span style="color:#a87b8f;">(564)</span></div>
+                    <button class="btn-add" onclick="triggerToast('Rose Quartz Highlighter added to bag ✨')">Add to Bag</button>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <span class="product-tag">Hydrating</span>
+                        <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=600&auto=format&fit=crop" alt="Botanical Lip Oil">
+                    </div>
+                    <h3>Botanical Lip Oil</h3>
+                    <div class="product-category">Lips · Treatment</div>
+                    <div class="product-price-row">
+                        <span class="price">Ksh 922.00</span>
+                    </div>
+                    <div class="stars">★★★★★ <span style="color:#a87b8f;">(1,033)</span></div>
+                    <button class="btn-add" onclick="triggerToast('Botanical Lip Oil added to bag ✨')">Add to Bag</button>
+                </div>
+            </div>
+
+            <div class="view-all-wrap">
+                <a href="#" class="btn-outline">View All Products <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </section>
+
+        <!-- CATEGORIES -->
+        <section class="categories">
+            <div class="section-heading">
+                <span class="eyebrow">Explore Collections</span>
+                <h2>Shop by <em>Category</em></h2>
+                <p>Find your perfect match from our curated collections, formulated for every skin type and concern.</p>
+            </div>
+
+            <div class="category-grid">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=800&auto=format&fit=crop" alt="Skincare collection">
+                    <div class="category-overlay">
+                        <span class="cat-count">24 Products</span>
+                        <h3>Skincare</h3>
+                        <span class="cat-link">Explore <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=800&auto=format&fit=crop" alt="Makeup collection">
+                    <div class="category-overlay">
+                        <span class="cat-count">36 Products</span>
+                        <h3>Makeup</h3>
+                        <span class="cat-link">Explore <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?q=80&w=800&auto=format&fit=crop" alt="Body care collection">
+                    <div class="category-overlay">
+                        <span class="cat-count">18 Products</span>
+                        <h3>Body &amp; Self Care</h3>
+                        <span class="cat-link">Explore <i class="fas fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BRAND STORY -->
+        <section class="brand-story" id="about">
+            <div class="brand-story-inner">
+                <div class="brand-story-image">
+                    <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=800&auto=format&fit=crop" alt="GlowAura botanical ingredients">
+                    <div class="brand-story-badge">
+                        <div class="badge-num">10+</div>
+                        <div class="badge-label">Years of<br>Clean Beauty</div>
+                    </div>
+                </div>
+
+                <div class="brand-story-content">
+                    <span class="eyebrow">Our Story</span>
+                    <h2>Beauty That <em>Gives Back</em></h2>
+                    <p>
+                        Founded in 2014, GlowAura began with a simple belief: skincare should be gentle, effective, 
+                        and kind to the planet. We started in a small kitchen with hand-poured formulas, driven 
+                        by a passion for clean ingredients and transparent beauty.
+                    </p>
+                    <p>
+                        Today, every GlowAura product is still crafted with the same care — free from parabens, sulfates, 
+                        and synthetic fragrances. We source sustainably, test ethically, and formulate scientifically.
+                    </p>
+
+                    <div class="brand-story-stats">
+                        <div class="stat-item">
+                            <span class="stat-num">50K+</span>
+                            <span class="stat-label">Happy Customers</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-num">100%</span>
+                            <span class="stat-label">Cruelty-Free</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-num">28</span>
+                            <span class="stat-label">Clean Products</span>
+                        </div>
+                    </div>
+
+                    <a href="#" class="btn-outline">Learn More <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section class="testimonials">
+            <div class="section-heading">
+                <span class="eyebrow">Real Reviews</span>
+                <h2>What Our <em>Glow Gang</em> Says</h2>
+                <p>Over 50,000 five-star reviews from customers who've made GlowAura part of their daily ritual.</p>
+            </div>
+
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        The Silk Glow Foundation is the only one that doesn't break me out. It feels like nothing on the skin 
+                        and gives the most natural, luminous finish. I'm on my fourth bottle!
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" alt="Sophia M.">
+                        <div>
+                            <div class="author-name">Sophia Martinez</div>
+                            <div class="author-role">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        I've struggled with sensitive skin for years. GlowAura's Botanical Lip Oil and Radiant Skin Cream 
+                        completely transformed my routine. Clean ingredients, real results — I'm obsessed.
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop" alt="Amara K.">
+                        <div>
+                            <div class="author-name">Amara Kim</div>
+                            <div class="author-role">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="testimonial-quote">"</div>
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">
+                        Beyond the products being incredible, I love that GlowAura is genuinely sustainable. 
+                        The refillable packaging and clean formulas make me feel good about what I'm putting on my skin.
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop" alt="Elena R.">
+                        <div>
+                            <div class="author-name">Elena Rossi</div>
+                            <div class="author-role">Verified Buyer</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INSTAGRAM GALLERY -->
+        <section class="instagram-section">
+            <div class="section-heading">
+                <span class="eyebrow">@glowaura</span>
+                <h2>Join the <em>Glow</em></h2>
+                <p>Tag us in your self-care moments for a chance to be featured.</p>
+            </div>
+
+            <div class="instagram-grid">
+                <div class="insta-item">
+                    <img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=400&auto=format&fit=crop" alt="GlowAura on Instagram">
+                    <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+                </div>
+                <div class="insta-item">
+                    <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=400&auto=format&fit=crop" alt="GlowAura on Instagram">
+                    <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+                </div>
+                <div class="insta-item">
+                    <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=400&auto=format&fit=crop" alt="GlowAura on Instagram">
+                    <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+                </div>
+                <div class="insta-item">
+                    <img src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?q=80&w=400&auto=format&fit=crop" alt="GlowAura on Instagram">
+                    <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+                </div>
+                <div class="insta-item">
+                    <img src="https://images.unsplash.com/photo-1457972729786-0411a3b2b626?q=80&w=400&auto=format&fit=crop" alt="GlowAura on Instagram">
+                    <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+                </div>
+                <div class="insta-item">
+                    <img src="https://images.unsplash.com/photo-1503236823255-94609f598e71?q=80&w=400&auto=format&fit=crop" alt="GlowAura on Instagram">
+                    <div class="insta-overlay"><i class="fab fa-instagram"></i></div>
+                </div>
+            </div>
+
+            <div class="insta-cta">
+                <a href="#"><i class="fab fa-instagram"></i> Follow @glowaura</a>
+            </div>
+        </section>
+
+        <!-- NEWSLETTER -->
+        <section class="newsletter-section" id="contact">
+            <h2>Join the <em>Glow List</em></h2>
+            <p>Enjoy 15% off your first order, plus skincare tips, early access to new launches, and exclusive offers.</p>
+            <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+                <input type="email" placeholder="Your email address" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+
+        <!-- FOOTER -->
+        <footer>
+            <div class="footer-inner">
+                <div class="footer-brand">
+                    <a href="#" class="logo flex items-center gap-3">
+                        <span class="logo-mark text-aura-gold text-xl">❀</span>
+                        <span class="logo-text flex flex-col">
+                            <span class="brand font-serif text-xl text-aura-cream">GlowAura</span>
+                            <span class="tagline text-[8px] tracking-[0.2em] text-aura-rose uppercase">Beauty · Skin · You</span>
+                        </span>
+                    </a>
+                    <p>
+                        Clean, conscious beauty made with love. Formulated with natural ingredients, 
+                        backed by science, and always cruelty-free.
+                    </p>
+                    <div class="footer-socials">
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Shop</h4>
+                    <ul>
+                        <li><a href="#">Skincare</a></li>
+                        <li><a href="#">Makeup</a></li>
+                        <li><a href="#">Body Care</a></li>
+                        <li><a href="#">Gift Sets</a></li>
+                        <li><a href="#">New Arrivals</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="#">Sustainability</a></li>
+                        <li><a href="#">Our Ingredients</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#">Shipping Info</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Track Order</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div>© 2025 GlowAura Cosmetics. All rights reserved.</div>
+                <div class="legal-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Cookie Settings</a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- BACK TO TOP BUTTON -->
+    <button class="back-to-top" id="backToTop" aria-label="Back to top" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Evenly distributed animated stars behind the 3D scene
+        (function initGalaxyStars() {
+            const host = document.getElementById('galaxy-stars');
+            if (!host) return;
+
+            const cols = 14;
+            const rows = 10;
+            const variants = ['', 'dim', 'cyan', 'rose'];
+            let i = 0;
+
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    const star = document.createElement('span');
+                    const variant = variants[i % variants.length];
+                    star.className = 'galaxy-star' + (variant ? ' ' + variant : '');
+
+                    const jitterX = (Math.random() - 0.5) * (100 / cols) * 0.55;
+                    const jitterY = (Math.random() - 0.5) * (100 / rows) * 0.55;
+                    const x = ((col + 0.5) / cols) * 100 + jitterX;
+                    const y = ((row + 0.5) / rows) * 100 + jitterY;
+                    const size = 1.2 + Math.random() * 2.4;
+
+                    star.style.left = x + '%';
+                    star.style.top = y + '%';
+                    star.style.width = size + 'px';
+                    star.style.height = size + 'px';
+                    star.style.setProperty('--opacity', (0.35 + Math.random() * 0.65).toFixed(2));
+                    star.style.setProperty('--dur', (2.2 + Math.random() * 3.5).toFixed(2) + 's');
+                    star.style.setProperty('--delay', (Math.random() * 4).toFixed(2) + 's');
+
+                    host.appendChild(star);
+                    i++;
+                }
+            }
+        })();
+
+        // Custom Toast Notification System
+        function triggerToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i class="fas fa-sparkles text-aura-gold"></i> ${message}`;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        function handleNewsletter(e) {
+            e.preventDefault();
+            triggerToast('Thank you for subscribing! ✨ Check your inbox for your 15% off code.');
+            e.target.reset();
+        }
+
+        // Show/hide back-to-top button on scroll
+        window.addEventListener('scroll', function() {
+            const btn = document.getElementById('backToTop');
+            if (window.scrollY > 400) {
+                btn.classList.add('show');
+            } else {
+                btn.classList.remove('show');
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href && href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
+        /* THREE.JS 3D ROTATING DISPLAY IN BACKGROUND */
+        window.onload = function() {
+            const container = document.getElementById('bg-canvas-container');
+
+            const scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x080D1A, 0.028);
+
+            const camera = new THREE.PerspectiveCamera(42, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 3.2, 8.6);
+            camera.lookAt(0, 0.7, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.22;
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            container.appendChild(renderer.domElement);
+
+            // Soft studio env for rich metal / glass reflections
+            const pmrem = new THREE.PMREMGenerator(renderer);
+            const envScene = new THREE.Scene();
+            envScene.background = new THREE.Color(0x111A2D);
+            envScene.add(new THREE.AmbientLight(0xE6E9FF, 1));
+            [[0xD9E7FF, 3, 4, 2, 1.2], [0xA88BFF, -3, 2, -1, 1], [0xFFD58A, 0, 5, -2, 0.9]].forEach(([c, x, y, z, s]) => {
+                const m = new THREE.Mesh(new THREE.SphereGeometry(s, 12, 12), new THREE.MeshBasicMaterial({ color: c }));
+                m.position.set(x, y, z);
+                envScene.add(m);
+            });
+            const envMap = pmrem.fromScene(envScene, 0.04).texture;
+            scene.environment = envMap;
+
+            // Luxury lighting: champagne + rose
+            scene.add(new THREE.AmbientLight(0xE6E9FF, 0.55));
+
+            const mainSpot = new THREE.SpotLight(0xFFE7B3, 5.2);
+            mainSpot.position.set(4.5, 11, 5.5);
+            mainSpot.angle = Math.PI / 4.2;
+            mainSpot.penumbra = 0.85;
+            mainSpot.castShadow = true;
+            mainSpot.shadow.mapSize.set(2048, 2048);
+            scene.add(mainSpot);
+
+            const rimRose = new THREE.DirectionalLight(0xA88BFF, 2.2);
+            rimRose.position.set(-6, 5, -3);
+            scene.add(rimRose);
+
+            const fillChampagne = new THREE.PointLight(0x8ED8D0, 2.4, 14);
+            fillChampagne.position.set(2.5, 3.2, 3);
+            scene.add(fillChampagne);
+
+            const pedestalGlow = new THREE.PointLight(0xFFD58A, 3.2, 7);
+            pedestalGlow.position.set(0, 0.5, 0);
+            scene.add(pedestalGlow);
+
+            const displayGroup = new THREE.Group();
+            scene.add(displayGroup);
+
+            // Materials
+            const goldMat = new THREE.MeshStandardMaterial({
+                color: 0xF3C96A,
+                metalness: 0.96,
+                roughness: 0.16,
+                envMap,
+                envMapIntensity: 1.25,
+                emissive: 0x49320D,
+                emissiveIntensity: 0.22
+            });
+            const roseGoldMat = new THREE.MeshStandardMaterial({
+                color: 0xB89AFF,
+                metalness: 0.94,
+                roughness: 0.2,
+                envMap,
+                envMapIntensity: 1.15,
+                emissive: 0x28194A,
+                emissiveIntensity: 0.12
+            });
+
+            // Layered rose-cream marble pedestal
+            function makeMarble(base, vein) {
+                const c = document.createElement('canvas');
+                c.width = c.height = 1024;
+                const ctx = c.getContext('2d');
+                const g = ctx.createRadialGradient(480, 420, 40, 512, 512, 700);
+                g.addColorStop(0, base);
+                g.addColorStop(1, vein);
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, 1024, 1024);
+                for (let i = 0; i < 32; i++) {
+                    ctx.strokeStyle = `rgba(105,130,175,${0.08 + Math.random() * 0.18})`;
+                    ctx.lineWidth = 1.5 + Math.random() * 2.5;
+                    ctx.beginPath();
+                    ctx.moveTo(Math.random() * 1024, Math.random() * 1024);
+                    ctx.bezierCurveTo(Math.random()*1024, Math.random()*1024, Math.random()*1024, Math.random()*1024, Math.random()*1024, Math.random()*1024);
+                    ctx.stroke();
+                }
+                const tex = new THREE.CanvasTexture(c);
+                tex.encoding = THREE.sRGBEncoding;
+                return tex;
+            }
+
+            const marbleMat = new THREE.MeshStandardMaterial({
+                map: makeMarble('#E8EEFA', '#A8B9D8'),
+                roughness: 0.14,
+                metalness: 0.12,
+                envMap,
+                envMapIntensity: 0.6
+            });
+
+            function addTier(rTop, rBot, h, y, mat) {
+                const mesh = new THREE.Mesh(new THREE.CylinderGeometry(rTop, rBot, h, 64), mat);
+                mesh.position.y = y;
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                displayGroup.add(mesh);
+                const rim = new THREE.Mesh(new THREE.TorusGeometry(rTop, 0.028, 12, 80), goldMat);
+                rim.rotation.x = Math.PI / 2;
+                rim.position.y = y + h / 2 + 0.01;
+                displayGroup.add(rim);
+            }
+            addTier(2.95, 3.25, 0.38, -0.35, marbleMat);
+            addTier(2.35, 2.55, 0.22, -0.02, new THREE.MeshStandardMaterial({
+                map: makeMarble('#DCE8F4', '#7894B8'), roughness: 0.18, metalness: 0.18, envMap
+            }));
+            addTier(1.85, 1.95, 0.12, 0.16, roseGoldMat);
+
+            // Soft luminous disc under products
+            const glowDisc = new THREE.Mesh(
+                new THREE.CircleGeometry(1.7, 48),
+                new THREE.MeshBasicMaterial({ color: 0xFFD58A, transparent: true, opacity: 0.14, depthWrite: false })
+            );
+            glowDisc.rotation.x = -Math.PI / 2;
+            glowDisc.position.y = 0.24;
+            displayGroup.add(glowDisc);
+
+            // Luxury label painter
+            function createLabelTexture(opts) {
+                const {
+                    brand = 'GLOWAURA',
+                    title = 'SERUM',
+                    line = '',
+                    volume = '',
+                    bg = ['#10182A', '#1B2942'],
+                    ink = '#FDFBF7',
+                    accent = '#F3C96A',
+                    rose = '#B89AFF'
+                } = opts;
+
+                const canvas = document.createElement('canvas');
+                canvas.width = 512;
+                canvas.height = 640;
+                const ctx = canvas.getContext('2d');
+
+                const grad = ctx.createLinearGradient(0, 0, 0, 640);
+                grad.addColorStop(0, bg[0]);
+                grad.addColorStop(1, bg[1]);
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, 512, 640);
+
+                // Ornate gold frame
+                ctx.strokeStyle = accent;
+                ctx.lineWidth = 5;
+                ctx.strokeRect(28, 28, 456, 584);
+                ctx.lineWidth = 1.5;
+                ctx.strokeRect(42, 42, 428, 556);
+
+                // Corner flourishes
+                ctx.strokeStyle = rose;
+                ctx.lineWidth = 1.2;
+                [[50, 50], [462, 50], [50, 590], [462, 590]].forEach(([cx, cy], i) => {
+                    const sx = i % 2 === 0 ? 1 : -1;
+                    const sy = i < 2 ? 1 : -1;
+                    ctx.beginPath();
+                    ctx.moveTo(cx, cy + 28 * sy);
+                    ctx.quadraticCurveTo(cx, cy, cx + 28 * sx, cy);
+                    ctx.stroke();
+                });
+
+                // Lotus mark
+                ctx.fillStyle = accent;
+                ctx.beginPath();
+                ctx.ellipse(256, 110, 8, 22, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(256, 110, 8, 22, Math.PI / 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.ellipse(256, 110, 8, 22, -Math.PI / 3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = ink;
+                ctx.font = '600 44px "Cormorant Garamond", Georgia, serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(brand, 256, 190);
+
+                ctx.strokeStyle = accent;
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(150, 215);
+                ctx.lineTo(362, 215);
+                ctx.stroke();
+                ctx.fillStyle = accent;
+                ctx.beginPath();
+                ctx.arc(256, 215, 3.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.fillStyle = accent;
+                ctx.font = '700 25px "Plus Jakarta Sans", sans-serif';
+                ctx.fillText(title.toUpperCase(), 256, 270);
+
+                if (line) {
+                    ctx.fillStyle = 'rgba(253,251,247,0.95)';
+                    ctx.font = 'italic 25px "Cormorant Garamond", Georgia, serif';
+                    ctx.fillText(line, 256, 320);
+                }
+
+                if (volume) {
+                    ctx.fillStyle = accent;
+                    ctx.font = '500 16px "Plus Jakarta Sans", sans-serif';
+                    ctx.fillText(volume, 256, 520);
+                }
+
+                ctx.fillStyle = 'rgba(243,201,106,0.85)';
+                ctx.font = '400 13px "Plus Jakarta Sans", sans-serif';
+                ctx.fillText('CLEAN · LUXURY · GLOW', 256, 560);
+
+                const texture = new THREE.CanvasTexture(canvas);
+                texture.encoding = THREE.sRGBEncoding;
+                texture.needsUpdate = true;
+                return texture;
+            }
+
+            function wrapLabel(group, radius, height, y, texture, arc) {
+                const geo = new THREE.CylinderGeometry(radius, radius, height, 48, 1, true, -arc / 2, arc);
+                const mat = new THREE.MeshStandardMaterial({
+                    map: texture,
+                    emissive: 0xffffff,
+                    emissiveMap: texture,
+                    emissiveIntensity: 0.28,
+                    roughness: 0.35,
+                    metalness: 0.08,
+                    transparent: true,
+                    side: THREE.DoubleSide
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.y = y;
+                group.add(mesh);
+                return mesh;
+            }
+
+            function addRibbedCollar(group, y, radius, count, mat) {
+                for (let i = 0; i < count; i++) {
+                    const a = (i / count) * Math.PI * 2;
+                    const rib = new THREE.Mesh(new THREE.BoxGeometry(0.018, 0.12, 0.025), mat);
+                    rib.position.set(Math.cos(a) * radius, y, Math.sin(a) * radius);
+                    rib.rotation.y = -a;
+                    group.add(rib);
+                }
+            }
+
+            // ── PRODUCT 1: Rose Silk Serum ──
+            const serumGroup = new THREE.Group();
+            serumGroup.position.set(-1.15, 0.22, 0.45);
+
+            const roseGlass = new THREE.MeshPhysicalMaterial({
+                color: 0xA8D9D2,
+                transmission: 0.72,
+                transparent: true,
+                roughness: 0.08,
+                metalness: 0.05,
+                ior: 1.5,
+                thickness: 0.4,
+                envMap,
+                envMapIntensity: 1.1,
+                clearcoat: 0.7,
+                clearcoatRoughness: 0.12
+            });
+            const serumLiquid = new THREE.MeshStandardMaterial({
+                color: 0x4FAE9D, roughness: 0.35, metalness: 0.1, transparent: true, opacity: 0.92
+            });
+
+            const serumBottle = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.42, 1.35, 40), roseGlass);
+            serumBottle.position.y = 0.72;
+            serumBottle.castShadow = true;
+            serumGroup.add(serumBottle);
+
+            const serumFill = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.36, 0.95, 32), serumLiquid);
+            serumFill.position.y = 0.55;
+            serumGroup.add(serumFill);
+
+            wrapLabel(serumGroup, 0.425, 0.72, 0.68, createLabelTexture({
+                title: 'Radiance Silk Serum',
+                line: 'Rosehip · 24k Glow',
+                volume: '50 ml  ·  1.7 fl oz',
+                bg: ['#102421', '#1A403A']
+            }), Math.PI * 0.85);
+
+            const serumCap = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.16, 28), goldMat);
+            serumCap.position.y = 1.48;
+            serumGroup.add(serumCap);
+            addRibbedCollar(serumGroup, 1.48, 0.255, 16, roseGoldMat);
+
+            const bulb = new THREE.Mesh(
+                new THREE.SphereGeometry(0.16, 20, 20),
+                new THREE.MeshStandardMaterial({ color: 0xf5ebe4, roughness: 0.45 })
+            );
+            bulb.position.y = 1.72;
+            bulb.scale.set(1, 1.15, 1);
+            serumGroup.add(bulb);
+            displayGroup.add(serumGroup);
+
+            // ── PRODUCT 2: Velvet Night Cream jar ──
+            const jarGroup = new THREE.Group();
+            jarGroup.position.set(1.25, 0.22, -0.15);
+
+            const jarBody = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.58, 0.52, 0.78, 40),
+                new THREE.MeshStandardMaterial({
+                color: 0x18243A,
+                    roughness: 0.22,
+                    metalness: 0.45,
+                    envMap,
+                    envMapIntensity: 0.9
+                })
+            );
+            jarBody.position.y = 0.42;
+            jarBody.castShadow = true;
+            jarGroup.add(jarBody);
+
+            // Rose enamel band
+            const enamel = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.585, 0.525, 0.12, 40),
+                new THREE.MeshStandardMaterial({ color: 0xA88BFF, metalness: 0.35, roughness: 0.3, envMap })
+            );
+            enamel.position.y = 0.42;
+            jarGroup.add(enamel);
+
+            wrapLabel(jarGroup, 0.59, 0.42, 0.42, createLabelTexture({
+                title: 'Velvet Night Cream',
+                line: 'Peptide Recovery',
+                volume: '30 ml  ·  1.0 fl oz',
+                bg: ['#141B2C', '#263553'],
+                accent: '#F3C96A',
+                rose: '#C6B4FF'
+            }), Math.PI * 0.9);
+
+            const jarCap = new THREE.Mesh(new THREE.CylinderGeometry(0.6, 0.6, 0.22, 40), goldMat);
+            jarCap.position.y = 0.92;
+            jarCap.castShadow = true;
+            jarGroup.add(jarCap);
+
+            const jarJewel = new THREE.Mesh(
+                new THREE.CircleGeometry(0.12, 24),
+                new THREE.MeshStandardMaterial({ color: 0xB89AFF, metalness: 0.7, roughness: 0.15, envMap })
+            );
+            jarJewel.rotation.x = -Math.PI / 2;
+            jarJewel.position.y = 1.04;
+            jarGroup.add(jarJewel);
+            displayGroup.add(jarGroup);
+
+            // ── PRODUCT 3: Champagne Elixir ──
+            const elixirGroup = new THREE.Group();
+            elixirGroup.position.set(0.05, 0.22, -1.15);
+
+            const champagneGlass = new THREE.MeshPhysicalMaterial({
+                color: 0xE5C77B,
+                transmission: 0.68,
+                transparent: true,
+                roughness: 0.06,
+                metalness: 0.08,
+                ior: 1.48,
+                thickness: 0.35,
+                envMap,
+                clearcoat: 0.8,
+                clearcoatRoughness: 0.1
+            });
+            const elixirLiquid = new THREE.MeshStandardMaterial({
+                color: 0xD9A84E, roughness: 0.3, metalness: 0.15, transparent: true, opacity: 0.9
+            });
+
+            const elixirBottle = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.36, 1.7, 40), champagneGlass);
+            elixirBottle.position.y = 0.9;
+            elixirBottle.castShadow = true;
+            elixirGroup.add(elixirBottle);
+
+            const elixirFill = new THREE.Mesh(new THREE.CylinderGeometry(0.27, 0.3, 1.15, 32), elixirLiquid);
+            elixirFill.position.y = 0.7;
+            elixirGroup.add(elixirFill);
+
+            wrapLabel(elixirGroup, 0.365, 0.85, 0.85, createLabelTexture({
+                title: 'Luxe Glow Elixir',
+                line: 'Botanical Gold Essence',
+                volume: '40 ml  ·  1.35 fl oz',
+                bg: ['#202018', '#3D321B'],
+                accent: '#FFE08A',
+                rose: '#A8D9D2'
+            }), Math.PI * 0.82);
+
+            const elixirCollar = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.14, 28), roseGoldMat);
+            elixirCollar.position.y = 1.82;
+            elixirGroup.add(elixirCollar);
+            addRibbedCollar(elixirGroup, 1.82, 0.235, 14, goldMat);
+
+            const elixirBulb = new THREE.Mesh(
+                new THREE.SphereGeometry(0.14, 18, 18),
+                new THREE.MeshStandardMaterial({ color: 0x1a1218, roughness: 0.55 })
+            );
+            elixirBulb.position.y = 2.02;
+            elixirGroup.add(elixirBulb);
+            displayGroup.add(elixirGroup);
+
+            // Floating gold dust + rose petals
+            const sparkles = [];
+            const sparkleGeo = new THREE.SphereGeometry(0.035, 8, 8);
+            const sparkleMat = new THREE.MeshStandardMaterial({
+                color: 0xFFD36E, metalness: 1, roughness: 0.15, emissive: 0xFFD36E, emissiveIntensity: 0.45
+            });
+            for (let i = 0; i < 36; i++) {
+                const s = new THREE.Mesh(sparkleGeo, sparkleMat);
+                const a = Math.random() * Math.PI * 2;
+                const r = 1.2 + Math.random() * 3.2;
+                s.position.set(Math.cos(a) * r, 0.4 + Math.random() * 3.2, Math.sin(a) * r);
+                s.scale.setScalar(0.4 + Math.random() * 1.2);
+                s.userData = { base: s.position.clone(), phase: Math.random() * Math.PI * 2, speed: 0.3 + Math.random() * 0.5 };
+                displayGroup.add(s);
+                sparkles.push(s);
+            }
+
+            const petalShape = new THREE.Shape();
+            petalShape.moveTo(0, -0.18);
+            petalShape.bezierCurveTo(0.14, -0.06, 0.14, 0.08, 0, 0.2);
+            petalShape.bezierCurveTo(-0.14, 0.08, -0.14, -0.06, 0, -0.18);
+            const petalGeo = new THREE.ShapeGeometry(petalShape);
+            const petals = [];
+            for (let i = 0; i < 14; i++) {
+                const p = new THREE.Mesh(petalGeo, new THREE.MeshStandardMaterial({
+                    color: i % 2 ? 0xB89AFF : 0xFFD36E,
+                    side: THREE.DoubleSide,
+                    transparent: true,
+                    opacity: 0.7,
+                    roughness: 0.5
+                }));
+                const a = Math.random() * Math.PI * 2;
+                const r = 1.6 + Math.random() * 2.8;
+                p.position.set(Math.cos(a) * r, 0.8 + Math.random() * 2.5, Math.sin(a) * r * 0.8);
+                p.scale.setScalar(0.45 + Math.random() * 0.7);
+                p.userData = { base: p.position.clone(), phase: Math.random() * Math.PI * 2, spin: (Math.random() - 0.5) * 0.012 };
+                displayGroup.add(p);
+                petals.push(p);
+            }
+
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            let mouseX = 0, mouseY = 0;
+            document.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX / window.innerWidth - 0.5) * 0.3;
+                mouseY = (e.clientY / window.innerHeight - 0.5) * 0.3;
+            });
+
+            function animate() {
+                requestAnimationFrame(animate);
+                const time = Date.now() * 0.001;
+
+                displayGroup.rotation.y += 0.0045;
+
+                serumGroup.position.y = 0.22 + Math.sin(time * 1.1) * 0.045;
+                jarGroup.position.y = 0.22 + Math.sin(time * 1.1 + 1.2) * 0.035;
+                elixirGroup.position.y = 0.22 + Math.sin(time * 1.1 + 2.1) * 0.04;
+
+                glowDisc.material.opacity = 0.1 + Math.sin(time * 1.4) * 0.04;
+                pedestalGlow.intensity = 2.8 + Math.sin(time) * 0.4;
+
+                sparkles.forEach((s) => {
+                    const u = s.userData;
+                    s.position.y = u.base.y + Math.sin(time * u.speed + u.phase) * 0.2;
+                    s.rotation.y += 0.02;
+                });
+                petals.forEach((p) => {
+                    const u = p.userData;
+                    p.position.y = u.base.y + Math.sin(time * 0.6 + u.phase) * 0.18;
+                    p.rotation.z += u.spin;
+                    p.rotation.x += u.spin * 0.5;
+                });
+
+                camera.position.x += (mouseX * 2.8 - camera.position.x) * 0.03;
+                camera.position.y += (3.2 - mouseY * 1.8 - camera.position.y) * 0.03;
+                camera.lookAt(0, 0.7, 0);
+
+                renderer.render(scene, camera);
+            }
+            animate();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GlowAura | Silk Glow Foundation</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            aura: {
+              bg: '#0F0D13',
+              card: 'rgba(255, 255, 255, 0.05)',
+              gold: '#E0C097',
+              goldHover: '#F3D5AC',
+              rose: '#D8A7B1',
+              cream: '#FDFBF7',
+              dark: '#0A080D'
+            }
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #05020f;
+      color: #FDFBF7;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Galaxy + stars (same as index) */
+    #galaxy-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(88, 28, 135, 0.45) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 85% 15%, rgba(30, 64, 175, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 80%, rgba(157, 23, 77, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 70% 55%, rgba(6, 182, 212, 0.18) 0%, transparent 45%),
+        radial-gradient(ellipse 50% 45% at 25% 70%, rgba(99, 102, 241, 0.22) 0%, transparent 50%),
+        linear-gradient(160deg, #05020f 0%, #0a0618 35%, #0d0820 65%, #060412 100%);
+      animation: galaxyShift 28s ease-in-out infinite alternate;
+    }
+
+    @keyframes galaxyShift {
+      0% {
+        filter: hue-rotate(0deg) brightness(1);
+        background-position: 0% 0%, 100% 0%, 50% 100%, 70% 50%, 25% 70%, 0 0;
+      }
+      100% {
+        filter: hue-rotate(18deg) brightness(1.08);
+        background-position: 8% 5%, 92% 8%, 45% 95%, 65% 58%, 30% 65%, 0 0;
+      }
+    }
+
+    #galaxy-stars {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .galaxy-star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+      animation: starTwinkle var(--dur, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      opacity: var(--opacity, 0.7);
+    }
+
+    .galaxy-star.dim {
+      background: #c4b5fd;
+      box-shadow: 0 0 6px rgba(167, 139, 250, 0.7);
+    }
+
+    .galaxy-star.cyan {
+      background: #a5f3fc;
+      box-shadow: 0 0 6px rgba(103, 232, 249, 0.75);
+    }
+
+    .galaxy-star.rose {
+      background: #fbcfe8;
+      box-shadow: 0 0 6px rgba(244, 114, 182, 0.7);
+    }
+
+    @keyframes starTwinkle {
+      0%, 100% { opacity: var(--opacity, 0.7); transform: scale(1); }
+      50% { opacity: calc(var(--opacity, 0.7) * 0.25); transform: scale(0.65); }
+    }
+
+    .galaxy-nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: nebulaDrift 22s ease-in-out infinite alternate;
+    }
+
+    .galaxy-nebula.n1 {
+      width: 42vw;
+      height: 42vw;
+      top: -8%;
+      left: -5%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.55) 0%, transparent 70%);
+      animation-duration: 26s;
+    }
+
+    .galaxy-nebula.n2 {
+      width: 36vw;
+      height: 36vw;
+      top: 10%;
+      right: -8%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%);
+      animation-duration: 20s;
+      animation-delay: -4s;
+    }
+
+    .galaxy-nebula.n3 {
+      width: 48vw;
+      height: 38vw;
+      bottom: -12%;
+      left: 20%;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%);
+      animation-duration: 24s;
+      animation-delay: -8s;
+    }
+
+    .galaxy-nebula.n4 {
+      width: 28vw;
+      height: 28vw;
+      top: 45%;
+      left: 55%;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, transparent 70%);
+      animation-duration: 18s;
+      animation-delay: -2s;
+    }
+
+    @keyframes nebulaDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(3%, -4%) scale(1.08); }
+    }
+
+    .content-layer {
+      position: relative;
+      z-index: 10;
+    }
+
+    .detail-image {
+      background: rgba(20, 16, 26, 0.7);
+      border: 1px solid rgba(224, 192, 151, 0.18);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 35px 50px -24px rgba(0, 0, 0, 0.5);
+    }
+
+    .thumb {
+      border: 2px solid transparent;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      opacity: 0.75;
+    }
+
+    .thumb:hover { opacity: 1; }
+
+    .thumb.active {
+      border-color: #E0C097;
+      transform: translateY(-2px);
+      opacity: 1;
+    }
+
+    .size-btn {
+      border: 1px solid rgba(224, 192, 151, 0.35);
+      color: rgba(253, 251, 247, 0.8);
+      transition: all 0.25s ease;
+      background: rgba(20, 16, 26, 0.4);
+    }
+
+    .size-btn.active {
+      background: linear-gradient(135deg, #E0C097, #B88E5E);
+      color: #0A080D;
+      border-color: transparent;
+      box-shadow: 0 10px 20px rgba(224, 192, 151, 0.25);
+    }
+
+    .swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 9999px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 0 0 1px rgba(224, 192, 151, 0.2);
+    }
+
+    .swatch.active {
+      border-color: #E0C097;
+      box-shadow: 0 0 0 2px rgba(10, 8, 13, 0.9), 0 0 0 4px rgba(224, 192, 151, 0.45);
+    }
+
+    .detail-card {
+      background: rgba(20, 16, 26, 0.65);
+      border: 1px solid rgba(224, 192, 151, 0.18);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .tab-btn {
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      color: rgba(253, 251, 247, 0.55);
+    }
+
+    .tab-btn.active {
+      color: #E0C097;
+      border-color: #E0C097;
+    }
+
+    .related-card {
+      background: rgba(20, 16, 26, 0.65);
+      border: 1px solid rgba(224, 192, 151, 0.12);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .related-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      border-color: rgba(224, 192, 151, 0.4);
+    }
+
+    .tabs-panel-wrap {
+      background: rgba(20, 16, 26, 0.55);
+      border: 1px solid rgba(224, 192, 151, 0.18);
+      backdrop-filter: blur(12px);
+    }
+  </style>
+</head>
+<body class="relative min-h-screen">
+
+  <!-- Galaxy colors + stars -->
+  <div id="galaxy-bg" aria-hidden="true">
+    <div class="galaxy-nebula n1"></div>
+    <div class="galaxy-nebula n2"></div>
+    <div class="galaxy-nebula n3"></div>
+    <div class="galaxy-nebula n4"></div>
+    <div id="galaxy-stars"></div>
+  </div>
+
+  <div class="content-layer">
+    <header class="sticky top-0 z-50 border-b border-aura-gold/15 bg-aura-dark/70 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <span class="text-aura-gold text-2xl group-hover:rotate-180 transition-transform duration-700">❀</span>
+          <div class="flex flex-col">
+            <span class="font-serif text-2xl tracking-wider text-aura-cream font-medium uppercase">GlowAura</span>
+            <span class="text-[9px] tracking-[0.25em] text-aura-rose uppercase -mt-1">Beauty · Skin · You</span>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-[0.25em] text-aura-cream/80">
+          <a href="index.html#hero" class="hover:text-aura-gold transition-colors">Experience</a>
+          <a href="index.html#shop" class="hover:text-aura-gold transition-colors">Bestsellers</a>
+          <a href="index.html#values" class="hover:text-aura-gold transition-colors">Values</a>
+          <a href="about.html" class="hover:text-aura-gold transition-colors">Our Story</a>
+          <a href="contact.html" class="hover:text-aura-gold transition-colors">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-5 text-aura-gold">
+          <button class="hover:text-aura-cream transition-colors p-2" aria-label="Search"><i class="fas fa-search text-lg"></i></button>
+          <button class="hover:text-aura-cream transition-colors p-2 relative" aria-label="Cart">
+            <i class="fas fa-shopping-bag text-lg"></i>
+            <span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-aura-rose"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-6 py-8 md:py-12">
+      <div class="mb-8 flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.22em] text-aura-cream/50">
+        <a href="index.html" class="hover:text-aura-gold transition-colors">Home</a>
+        <span>/</span>
+        <a href="index.html#shop" class="hover:text-aura-gold transition-colors">Shop</a>
+        <span>/</span>
+        <span class="text-aura-cream/80">Silk Glow Foundation</span>
+      </div>
+
+      <section class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+        <div class="space-y-4">
+          <div class="detail-image">
+            <img id="mainImage" src="https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=1200&auto=format&fit=crop" alt="GlowAura Silk Glow Foundation" class="h-[520px] w-full object-cover" />
+          </div>
+
+          <div class="grid grid-cols-4 gap-3">
+            <img class="thumb active h-24 w-full rounded-2xl object-cover" src="https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=600&auto=format&fit=crop" alt="front view" data-image="https://images.unsplash.com/photo-1617897903246-719242758050?q=80&w=1200&auto=format&fit=crop" />
+            <img class="thumb h-24 w-full rounded-2xl object-cover" src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=600&auto=format&fit=crop" alt="texture detail" data-image="https://images.unsplash.com/photo-1596704017254-9b121068fb31?q=80&w=1200&auto=format&fit=crop" />
+            <img class="thumb h-24 w-full rounded-2xl object-cover" src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=600&auto=format&fit=crop" alt="shade swatches" data-image="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?q=80&w=1200&auto=format&fit=crop" />
+            <img class="thumb h-24 w-full rounded-2xl object-cover" src="https://images.unsplash.com/photo-1631730359585-38a4935cbec4?q=80&w=600&auto=format&fit=crop" alt="packaging" data-image="https://images.unsplash.com/photo-1631730359585-38a4935cbec4?q=80&w=1200&auto=format&fit=crop" />
+          </div>
+        </div>
+
+        <div class="detail-card rounded-[30px] p-6 md:p-8">
+          <div class="mb-4 uppercase tracking-[0.25em] text-[11px] text-aura-rose font-semibold">Bestseller · Face</div>
+          <h1 class="font-serif text-5xl leading-none text-aura-cream">Silk Glow Foundation</h1>
+
+          <div class="mt-5 flex items-center gap-3 text-sm text-aura-cream/70">
+            <span class="text-aura-gold text-lg tracking-[0.12em]">★★★★★</span>
+            <span>4.8 · 1,247 reviews</span>
+          </div>
+
+          <div class="mt-6 flex items-end gap-3 flex-wrap">
+            <span class="font-serif text-4xl text-aura-gold">$42.00</span>
+            <span class="text-lg text-aura-cream/35 line-through">$52.00</span>
+          </div>
+
+          <p class="mt-6 text-base leading-8 text-aura-cream/70">
+            A weightless, buildable formula infused with hyaluronic acid and botanical squalane for a radiant second-skin finish.
+            It blurs imperfections, hydrates deeply, and stays comfortable from morning meetings to evening plans.
+          </p>
+
+          <div class="mt-8">
+            <div class="mb-3 flex items-center justify-between">
+              <span class="text-xs uppercase tracking-[0.2em] text-aura-cream/50">Shade</span>
+              <span id="shadeLabel" class="text-sm text-aura-cream/70">Porcelain 01</span>
+            </div>
+
+            <div class="flex flex-wrap gap-3">
+              <button class="swatch active" data-shade="Porcelain 01" style="background:#f7e5d6" aria-label="Porcelain 01"></button>
+              <button class="swatch" data-shade="Ivory 02" style="background:#f0d3b8" aria-label="Ivory 02"></button>
+              <button class="swatch" data-shade="Beige 03" style="background:#e3b99b" aria-label="Beige 03"></button>
+              <button class="swatch" data-shade="Sand 04" style="background:#d1a17f" aria-label="Sand 04"></button>
+              <button class="swatch" data-shade="Honey 05" style="background:#b47f5d" aria-label="Honey 05"></button>
+              <button class="swatch" data-shade="Caramel 06" style="background:#8c5e42" aria-label="Caramel 06"></button>
+              <button class="swatch" data-shade="Espresso 07" style="background:#633f2b" aria-label="Espresso 07"></button>
+            </div>
+          </div>
+
+          <div class="mt-8">
+            <div class="mb-3 text-xs uppercase tracking-[0.2em] text-aura-cream/50">Size</div>
+            <div class="flex flex-wrap gap-3">
+              <button class="size-btn rounded-full px-4 py-2 text-sm">15 ml</button>
+              <button class="size-btn active rounded-full px-4 py-2 text-sm">30 ml</button>
+              <button class="size-btn rounded-full px-4 py-2 text-sm">50 ml</button>
+            </div>
+          </div>
+
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <div class="flex items-center overflow-hidden rounded-full border border-aura-gold/30 bg-aura-dark/40">
+              <button class="qty-btn h-12 w-12 text-xl text-aura-cream/80 hover:bg-white/5" data-action="decrease">−</button>
+              <input id="qty" type="text" value="1" class="w-12 bg-transparent text-center text-base font-medium text-aura-cream outline-none" readonly />
+              <button class="qty-btn h-12 w-12 text-xl text-aura-cream/80 hover:bg-white/5" data-action="increase">+</button>
+            </div>
+
+            <button class="flex-1 min-w-[220px] rounded-full bg-gradient-to-r from-aura-gold to-yellow-600 px-6 py-3 text-sm font-semibold uppercase tracking-[0.18em] text-aura-dark transition hover:shadow-[0_0_25px_rgba(224,192,151,0.45)]">
+              Add to bag
+            </button>
+
+            <button class="flex h-12 w-12 items-center justify-center rounded-full border border-aura-gold/40 bg-aura-dark/30 text-aura-gold transition hover:border-aura-gold hover:bg-aura-gold/10" aria-label="Save item">
+              <i class="far fa-heart"></i>
+            </button>
+          </div>
+
+          <ul class="mt-8 space-y-3 border-t border-aura-gold/20 pt-6 text-sm text-aura-cream/65">
+            <li class="flex items-center gap-3"><i class="fas fa-truck text-aura-gold"></i> Free shipping over $50</li>
+            <li class="flex items-center gap-3"><i class="fas fa-undo text-aura-gold"></i> 30-day returns</li>
+            <li class="flex items-center gap-3"><i class="fas fa-leaf text-aura-gold"></i> Vegan · cruelty-free · non-comedogenic</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="tabs-panel-wrap mt-16 rounded-[32px] px-4 py-6 md:px-8">
+        <div class="flex flex-wrap gap-6 border-b border-aura-gold/20 pb-4 text-sm uppercase tracking-[0.2em] md:gap-10">
+          <button class="tab-btn active pb-2" data-tab="description">Description</button>
+          <button class="tab-btn pb-2" data-tab="ingredients">Ingredients</button>
+          <button class="tab-btn pb-2" data-tab="howto">How to use</button>
+          <button class="tab-btn pb-2" data-tab="shipping">Shipping</button>
+        </div>
+
+        <div class="tab-panel mt-8 space-y-4 text-aura-cream/70" data-panel="description">
+          <h3 class="font-serif text-3xl text-aura-cream">Silk-like finish, all-day comfort</h3>
+          <p>Designed to blur imperfections while keeping the skin breathable and hydrated, this medium-coverage foundation melts into the complexion for a natural, luminous finish.</p>
+          <p>With hyaluronic acid to cushion and plump, plus botanical squalane to seal in moisture, it layers beautifully without caking, settling, or feeling heavy.</p>
+        </div>
+
+        <div class="tab-panel mt-8 hidden space-y-4 text-aura-cream/70" data-panel="ingredients">
+          <h3 class="font-serif text-3xl text-aura-cream">Powered by clean botanicals</h3>
+          <ul class="space-y-3">
+            <li class="flex justify-between gap-3 border-b border-aura-gold/20 pb-2"><span>Hyaluronic Acid</span><span class="text-aura-gold">Deep hydration</span></li>
+            <li class="flex justify-between gap-3 border-b border-aura-gold/20 pb-2"><span>Botanical Squalane</span><span class="text-aura-gold">Locks in moisture</span></li>
+            <li class="flex justify-between gap-3 border-b border-aura-gold/20 pb-2"><span>Vitamin E</span><span class="text-aura-gold">Antioxidant support</span></li>
+            <li class="flex justify-between gap-3 border-b border-aura-gold/20 pb-2"><span>Rosehip Oil</span><span class="text-aura-gold">Brightens &amp; evens tone</span></li>
+            <li class="flex justify-between gap-3"><span>Mineral Pigments</span><span class="text-aura-gold">Natural, buildable coverage</span></li>
+          </ul>
+        </div>
+
+        <div class="tab-panel mt-8 hidden space-y-4 text-aura-cream/70" data-panel="howto">
+          <h3 class="font-serif text-3xl text-aura-cream">For a flawless, natural glow</h3>
+          <p>Apply with fingers, a damp sponge, or a brush. Start with one pump and build only where you need more coverage. The formula layers seamlessly for a soft-focus finish.</p>
+          <p>For extra luminosity, mix a drop of your favorite GlowAura serum into the foundation before application.</p>
+        </div>
+
+        <div class="tab-panel mt-8 hidden space-y-4 text-aura-cream/70" data-panel="shipping">
+          <h3 class="font-serif text-3xl text-aura-cream">Fast, mindful delivery</h3>
+          <ul class="space-y-3">
+            <li class="flex justify-between gap-3 border-b border-aura-gold/20 pb-2"><span>Standard</span><span class="text-aura-gold">3–5 business days</span></li>
+            <li class="flex justify-between gap-3 border-b border-aura-gold/20 pb-2"><span>Express</span><span class="text-aura-gold">1–2 business days</span></li>
+            <li class="flex justify-between gap-3"><span>Returns</span><span class="text-aura-gold">30 days · Free</span></li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="mt-18 pb-12">
+        <div class="mb-8 text-center">
+          <div class="text-xs uppercase tracking-[0.3em] text-aura-rose">Complete the glow</div>
+          <h2 class="mt-4 font-serif text-5xl text-aura-cream">Pairs beautifully with</h2>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <article class="related-card rounded-[28px] p-4">
+            <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?q=80&w=800&auto=format&fit=crop" alt="Velvet Matte Lip" class="h-64 w-full rounded-[20px] object-cover" />
+            <h3 class="mt-4 font-serif text-3xl text-aura-cream">Velvet Matte Lip</h3>
+            <p class="mt-2 text-sm uppercase tracking-[0.2em] text-aura-gold">$26.00</p>
+          </article>
+
+          <article class="related-card rounded-[28px] p-4">
+            <img src="https://images.unsplash.com/photo-1590156206657-7952b4e7a5b6?q=80&w=800&auto=format&fit=crop" alt="Rose Quartz Highlighter" class="h-64 w-full rounded-[20px] object-cover" />
+            <h3 class="mt-4 font-serif text-3xl text-aura-cream">Rose Quartz Highlighter</h3>
+            <p class="mt-2 text-sm uppercase tracking-[0.2em] text-aura-gold">$34.00</p>
+          </article>
+
+          <article class="related-card rounded-[28px] p-4">
+            <img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?q=80&w=800&auto=format&fit=crop" alt="Botanical Lip Oil" class="h-64 w-full rounded-[20px] object-cover" />
+            <h3 class="mt-4 font-serif text-3xl text-aura-cream">Botanical Lip Oil</h3>
+            <p class="mt-2 text-sm uppercase tracking-[0.2em] text-aura-gold">$22.00</p>
+          </article>
+
+          <article class="related-card rounded-[28px] p-4">
+            <img src="https://images.unsplash.com/photo-1631730359585-38a4935cbec4?q=80&w=800&auto=format&fit=crop" alt="Gentle Cleansing Balm" class="h-64 w-full rounded-[20px] object-cover" />
+            <h3 class="mt-4 font-serif text-3xl text-aura-cream">Gentle Cleansing Balm</h3>
+            <p class="mt-2 text-sm uppercase tracking-[0.2em] text-aura-gold">$28.00</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-10 border-t border-aura-gold/15 bg-aura-dark/95 text-aura-cream">
+      <div class="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <span class="text-aura-gold text-2xl">❀</span>
+            <div class="flex flex-col">
+              <span class="font-serif text-2xl uppercase">GlowAura</span>
+              <span class="text-[8px] tracking-[0.2em] text-aura-rose uppercase">Beauty · Skin · You</span>
+            </div>
+          </div>
+          <p class="mt-4 text-sm leading-7 text-aura-cream/65">Clean, conscious beauty designed to nourish skin and elevate your ritual.</p>
+        </div>
+
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Shop</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="#" class="hover:text-aura-gold">Skincare</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Makeup</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Body Care</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Company</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="#" class="hover:text-aura-gold">Our Story</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Ingredients</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Sustainability</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Support</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="#" class="hover:text-aura-gold">Shipping</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Returns</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function initGalaxyStars() {
+      const host = document.getElementById('galaxy-stars');
+      if (!host) return;
+
+      const cols = 14;
+      const rows = 10;
+      const variants = ['', 'dim', 'cyan', 'rose'];
+      let i = 0;
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const star = document.createElement('span');
+          const variant = variants[i % variants.length];
+          star.className = 'galaxy-star' + (variant ? ' ' + variant : '');
+
+          const jitterX = (Math.random() - 0.5) * (100 / cols) * 0.55;
+          const jitterY = (Math.random() - 0.5) * (100 / rows) * 0.55;
+          const x = ((col + 0.5) / cols) * 100 + jitterX;
+          const y = ((row + 0.5) / rows) * 100 + jitterY;
+          const size = 1.2 + Math.random() * 2.4;
+
+          star.style.left = x + '%';
+          star.style.top = y + '%';
+          star.style.width = size + 'px';
+          star.style.height = size + 'px';
+          star.style.setProperty('--opacity', (0.35 + Math.random() * 0.65).toFixed(2));
+          star.style.setProperty('--dur', (2.2 + Math.random() * 3.5).toFixed(2) + 's');
+          star.style.setProperty('--delay', (Math.random() * 4).toFixed(2) + 's');
+
+          host.appendChild(star);
+          i++;
+        }
+      }
+    })();
+
+    const mainImage = document.getElementById('mainImage');
+    document.querySelectorAll('.thumb').forEach((thumb) => {
+      thumb.addEventListener('click', () => {
+        document.querySelectorAll('.thumb').forEach((item) => item.classList.remove('active'));
+        thumb.classList.add('active');
+        mainImage.src = thumb.dataset.image;
+      });
+    });
+
+    document.querySelectorAll('.swatch').forEach((swatch) => {
+      swatch.addEventListener('click', () => {
+        document.querySelectorAll('.swatch').forEach((item) => item.classList.remove('active'));
+        swatch.classList.add('active');
+        document.getElementById('shadeLabel').textContent = swatch.dataset.shade;
+      });
+    });
+
+    document.querySelectorAll('.size-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.size-btn').forEach((item) => item.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    const qtyInput = document.getElementById('qty');
+    document.querySelectorAll('.qty-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        let value = Number(qtyInput.value);
+        if (btn.dataset.action === 'increase') value += 1;
+        if (btn.dataset.action === 'decrease') value = Math.max(1, value - 1);
+        qtyInput.value = value;
+      });
+    });
+
+    document.querySelectorAll('.tab-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach((tab) => tab.classList.remove('active'));
+        btn.classList.add('active');
+
+        document.querySelectorAll('.tab-panel').forEach((panel) => {
+          panel.classList.add('hidden');
+        });
+
+        const target = document.querySelector('[data-panel="' + btn.dataset.tab + '"]');
+        if (target) target.classList.remove('hidden');
+      });
+    });
+  </script>
+</body>
+</html>

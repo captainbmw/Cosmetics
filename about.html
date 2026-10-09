@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GlowAura | Our Story</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            aura: {
+              bg: '#0F0D13',
+              card: 'rgba(255, 255, 255, 0.05)',
+              gold: '#E0C097',
+              goldHover: '#F3D5AC',
+              rose: '#D8A7B1',
+              cream: '#FDFBF7',
+              dark: '#0A080D'
+            }
+          },
+          fontFamily: {
+            serif: ['Cormorant Garamond', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      background-color: #05020f;
+      color: #FDFBF7;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    #galaxy-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(88, 28, 135, 0.45) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 85% 15%, rgba(30, 64, 175, 0.4) 0%, transparent 50%),
+        radial-gradient(ellipse 90% 70% at 50% 80%, rgba(157, 23, 77, 0.28) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 40% at 70% 55%, rgba(6, 182, 212, 0.18) 0%, transparent 45%),
+        radial-gradient(ellipse 50% 45% at 25% 70%, rgba(99, 102, 241, 0.22) 0%, transparent 50%),
+        linear-gradient(160deg, #05020f 0%, #0a0618 35%, #0d0820 65%, #060412 100%);
+      animation: galaxyShift 28s ease-in-out infinite alternate;
+    }
+
+    @keyframes galaxyShift {
+      0% { filter: hue-rotate(0deg) brightness(1); }
+      100% { filter: hue-rotate(18deg) brightness(1.08); }
+    }
+
+    #galaxy-stars { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+    .galaxy-star {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+      animation: starTwinkle var(--dur, 3s) ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+      opacity: var(--opacity, 0.7);
+    }
+
+    .galaxy-star.dim { background: #c4b5fd; box-shadow: 0 0 6px rgba(167, 139, 250, 0.7); }
+    .galaxy-star.cyan { background: #a5f3fc; box-shadow: 0 0 6px rgba(103, 232, 249, 0.75); }
+    .galaxy-star.rose { background: #fbcfe8; box-shadow: 0 0 6px rgba(244, 114, 182, 0.7); }
+
+    @keyframes starTwinkle {
+      0%, 100% { opacity: var(--opacity, 0.7); transform: scale(1); }
+      50% { opacity: calc(var(--opacity, 0.7) * 0.25); transform: scale(0.65); }
+    }
+
+    .galaxy-nebula {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.35;
+      animation: nebulaDrift 22s ease-in-out infinite alternate;
+    }
+
+    .galaxy-nebula.n1 {
+      width: 42vw; height: 42vw; top: -8%; left: -5%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.55) 0%, transparent 70%);
+      animation-duration: 26s;
+    }
+    .galaxy-nebula.n2 {
+      width: 36vw; height: 36vw; top: 10%; right: -8%;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.5) 0%, transparent 70%);
+      animation-duration: 20s; animation-delay: -4s;
+    }
+    .galaxy-nebula.n3 {
+      width: 48vw; height: 38vw; bottom: -12%; left: 20%;
+      background: radial-gradient(circle, rgba(236, 72, 153, 0.4) 0%, transparent 70%);
+      animation-duration: 24s; animation-delay: -8s;
+    }
+    .galaxy-nebula.n4 {
+      width: 28vw; height: 28vw; top: 45%; left: 55%;
+      background: radial-gradient(circle, rgba(34, 211, 238, 0.35) 0%, transparent 70%);
+      animation-duration: 18s; animation-delay: -2s;
+    }
+
+    @keyframes nebulaDrift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(3%, -4%) scale(1.08); }
+    }
+
+    .content-layer { position: relative; z-index: 10; }
+
+    .glass-panel {
+      background: rgba(20, 16, 26, 0.65);
+      border: 1px solid rgba(224, 192, 151, 0.18);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .story-image {
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid rgba(224, 192, 151, 0.2);
+      position: relative;
+    }
+
+    .story-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      min-height: 420px;
+    }
+
+    .story-badge {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15, 13, 19, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(224, 192, 151, 0.3);
+      border-radius: 16px;
+      padding: 18px 24px;
+    }
+
+    .value-card {
+      background: rgba(20, 16, 26, 0.55);
+      border: 1px solid rgba(224, 192, 151, 0.12);
+      border-radius: 20px;
+      padding: 28px;
+      transition: all 0.35s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .value-card:hover {
+      border-color: rgba(224, 192, 151, 0.4);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .value-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(224, 192, 151, 0.12);
+      border: 1px solid rgba(224, 192, 151, 0.25);
+      color: #E0C097;
+      margin-bottom: 18px;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 36px;
+      padding-bottom: 36px;
+      border-left: 1px solid rgba(224, 192, 151, 0.25);
+    }
+
+    .timeline-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+
+    .timeline-dot {
+      position: absolute;
+      left: -7px;
+      top: 4px;
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: #E0C097;
+      box-shadow: 0 0 12px rgba(224, 192, 151, 0.5);
+    }
+
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      color: #E0C097;
+      font-weight: 600;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body class="relative min-h-screen">
+
+  <div id="galaxy-bg" aria-hidden="true">
+    <div class="galaxy-nebula n1"></div>
+    <div class="galaxy-nebula n2"></div>
+    <div class="galaxy-nebula n3"></div>
+    <div class="galaxy-nebula n4"></div>
+    <div id="galaxy-stars"></div>
+  </div>
+
+  <div class="content-layer">
+    <header class="sticky top-0 z-50 border-b border-aura-gold/15 bg-aura-dark/70 backdrop-blur-md">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <span class="text-aura-gold text-2xl group-hover:rotate-180 transition-transform duration-700">❀</span>
+          <div class="flex flex-col">
+            <span class="font-serif text-2xl tracking-wider text-aura-cream font-medium uppercase">GlowAura</span>
+            <span class="text-[9px] tracking-[0.25em] text-aura-rose uppercase -mt-1">Beauty · Skin · You</span>
+          </div>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm uppercase tracking-[0.25em] text-aura-cream/80">
+          <a href="index.html#hero" class="hover:text-aura-gold transition-colors">Experience</a>
+          <a href="index.html#shop" class="hover:text-aura-gold transition-colors">Bestsellers</a>
+          <a href="about.html" class="text-aura-gold">Our Story</a>
+          <a href="contact.html" class="hover:text-aura-gold transition-colors">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-5 text-aura-gold">
+          <button class="hover:text-aura-cream transition-colors p-2" aria-label="Search"><i class="fas fa-search text-lg"></i></button>
+          <button class="hover:text-aura-cream transition-colors p-2 relative" aria-label="Cart">
+            <i class="fas fa-shopping-bag text-lg"></i>
+            <span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-aura-rose"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-6 py-10 md:py-16">
+      <div class="mb-10 text-center max-w-2xl mx-auto">
+        <span class="text-aura-rose uppercase tracking-[0.3em] text-xs font-semibold">Our Story</span>
+        <h1 class="mt-4 font-serif text-5xl md:text-6xl text-aura-cream leading-tight">
+          Beauty That <em class="text-aura-gold italic">Gives Back</em>
+        </h1>
+        <p class="mt-5 text-aura-cream/65 text-base leading-relaxed">
+          Founded in 2014, GlowAura began with a simple belief: skincare should be gentle, effective, and kind to the planet.
+        </p>
+      </div>
+
+      <section class="grid gap-10 lg:grid-cols-2 lg:items-center mb-20">
+        <div class="story-image">
+          <img src="https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=1000&auto=format&fit=crop" alt="GlowAura botanical ingredients" />
+          <div class="story-badge flex items-center gap-4">
+            <div class="font-serif text-4xl text-aura-gold font-semibold leading-none">10+</div>
+            <div class="text-xs uppercase tracking-[0.08em] text-aura-cream/80 leading-snug">Years of<br>Clean Beauty</div>
+          </div>
+        </div>
+
+        <div>
+          <h2 class="font-serif text-4xl text-aura-cream mb-5">From a kitchen to a <em class="text-aura-gold italic">global glow</em></h2>
+          <p class="text-aura-cream/70 leading-relaxed mb-4">
+            We started in a small kitchen with hand-poured formulas, driven by a passion for clean ingredients and transparent beauty.
+            Every batch was tested on ourselves first — never on animals, never with harsh synthetics.
+          </p>
+          <p class="text-aura-cream/70 leading-relaxed mb-8">
+            Today, every GlowAura product is still crafted with the same care — free from parabens, sulfates, and synthetic fragrances.
+            We source sustainably, test ethically, and formulate scientifically.
+          </p>
+
+          <div class="flex flex-wrap gap-10 border-t border-aura-gold/15 pt-6">
+            <div>
+              <div class="stat-num">50K+</div>
+              <div class="text-xs uppercase tracking-[0.1em] text-aura-cream/50 mt-1">Happy Customers</div>
+            </div>
+            <div>
+              <div class="stat-num">100%</div>
+              <div class="text-xs uppercase tracking-[0.1em] text-aura-cream/50 mt-1">Cruelty-Free</div>
+            </div>
+            <div>
+              <div class="stat-num">28</div>
+              <div class="text-xs uppercase tracking-[0.1em] text-aura-cream/50 mt-1">Clean Products</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="mb-20">
+        <div class="text-center mb-10">
+          <span class="text-aura-rose uppercase tracking-[0.3em] text-xs font-semibold">What We Stand For</span>
+          <h2 class="mt-3 font-serif text-4xl md:text-5xl text-aura-cream">Our <em class="text-aura-gold italic">Values</em></h2>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-leaf"></i></div>
+            <h3 class="font-serif text-2xl text-aura-cream mb-2">Clean Beauty</h3>
+            <p class="text-sm text-aura-cream/60 leading-relaxed">No parabens, sulfates, or synthetic fragrances — only ingredients you’d recognize and trust.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-rabbit"></i></div>
+            <h3 class="font-serif text-2xl text-aura-cream mb-2">Cruelty-Free</h3>
+            <p class="text-sm text-aura-cream/60 leading-relaxed">Never tested on animals. Every formula is developed and verified with ethical standards.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-recycle"></i></div>
+            <h3 class="font-serif text-2xl text-aura-cream mb-2">Sustainable</h3>
+            <p class="text-sm text-aura-cream/60 leading-relaxed">Refillable packaging, recycled materials, and responsible sourcing from farm to bottle.</p>
+          </div>
+          <div class="value-card">
+            <div class="value-icon"><i class="fas fa-flask"></i></div>
+            <h3 class="font-serif text-2xl text-aura-cream mb-2">Science-Backed</h3>
+            <p class="text-sm text-aura-cream/60 leading-relaxed">Dermatologist-tested formulas that deliver visible results without compromising skin health.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="grid gap-10 lg:grid-cols-2 mb-20">
+        <div class="glass-panel rounded-[28px] p-8 md:p-10">
+          <span class="text-aura-rose uppercase tracking-[0.3em] text-xs font-semibold">Our Journey</span>
+          <h2 class="mt-3 font-serif text-4xl text-aura-cream mb-8">Milestones</h2>
+
+          <div>
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div class="text-aura-gold text-xs uppercase tracking-[0.15em] mb-1">2014</div>
+              <h3 class="font-serif text-xl text-aura-cream mb-1">GlowAura is born</h3>
+              <p class="text-sm text-aura-cream/60">First kitchen batches of botanical serums shared with friends and family.</p>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div class="text-aura-gold text-xs uppercase tracking-[0.15em] mb-1">2017</div>
+              <h3 class="font-serif text-xl text-aura-cream mb-1">First studio opens</h3>
+              <p class="text-sm text-aura-cream/60">Clean-room production begins with a small team of formulators and artists.</p>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div class="text-aura-gold text-xs uppercase tracking-[0.15em] mb-1">2021</div>
+              <h3 class="font-serif text-xl text-aura-cream mb-1">Global launch</h3>
+              <p class="text-sm text-aura-cream/60">Bestsellers expand worldwide; refillable packaging becomes standard.</p>
+            </div>
+            <div class="timeline-item">
+              <span class="timeline-dot"></span>
+              <div class="text-aura-gold text-xs uppercase tracking-[0.15em] mb-1">Today</div>
+              <h3 class="font-serif text-xl text-aura-cream mb-1">50K+ glow gang</h3>
+              <p class="text-sm text-aura-cream/60">A growing community of clean-beauty lovers — and more formulas on the way.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="story-image min-h-[480px]">
+          <img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=1000&auto=format&fit=crop" alt="GlowAura skincare ritual" />
+        </div>
+      </section>
+
+      <section class="glass-panel rounded-[28px] p-8 md:p-12 text-center mb-8">
+        <span class="text-aura-rose uppercase tracking-[0.3em] text-xs font-semibold">Join Us</span>
+        <h2 class="mt-3 font-serif text-4xl md:text-5xl text-aura-cream">Ready to find your <em class="text-aura-gold italic">glow</em>?</h2>
+        <p class="mt-4 text-aura-cream/65 max-w-xl mx-auto">Explore our bestsellers or reach out — we’d love to help you build a ritual that feels like you.</p>
+        <div class="mt-8 flex flex-wrap justify-center gap-4">
+          <a href="index.html#shop" class="px-8 py-3.5 rounded-full bg-gradient-to-r from-aura-gold to-yellow-600 text-aura-dark font-semibold tracking-wider uppercase text-xs hover:shadow-[0_0_25px_rgba(224,192,151,0.5)] transition-all">
+            Shop Bestsellers
+          </a>
+          <a href="contact.html" class="px-8 py-3.5 rounded-full border border-aura-gold/40 text-aura-gold uppercase tracking-wider text-xs hover:bg-aura-gold/10 transition-all">
+            Contact Us
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="mt-10 border-t border-aura-gold/15 bg-aura-dark/95 text-aura-cream">
+      <div class="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-4">
+        <div>
+          <div class="flex items-center gap-3">
+            <span class="text-aura-gold text-2xl">❀</span>
+            <div class="flex flex-col">
+              <span class="font-serif text-2xl uppercase">GlowAura</span>
+              <span class="text-[8px] tracking-[0.2em] text-aura-rose uppercase">Beauty · Skin · You</span>
+            </div>
+          </div>
+          <p class="mt-4 text-sm leading-7 text-aura-cream/65">Clean, conscious beauty designed to nourish skin and elevate your ritual.</p>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Shop</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="index.html#shop" class="hover:text-aura-gold">Bestsellers</a></li>
+            <li><a href="product.html" class="hover:text-aura-gold">Silk Glow Foundation</a></li>
+            <li><a href="index.html" class="hover:text-aura-gold">All Products</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Company</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="about.html" class="hover:text-aura-gold">Our Story</a></li>
+            <li><a href="contact.html" class="hover:text-aura-gold">Contact</a></li>
+            <li><a href="#" class="hover:text-aura-gold">Sustainability</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-xs uppercase tracking-[0.2em] text-aura-gold">Support</h4>
+          <ul class="mt-4 space-y-2 text-sm text-aura-cream/70">
+            <li><a href="contact.html" class="hover:text-aura-gold">Shipping</a></li>
+            <li><a href="contact.html" class="hover:text-aura-gold">Returns</a></li>
+            <li><a href="contact.html" class="hover:text-aura-gold">FAQ</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function initGalaxyStars() {
+      const host = document.getElementById('galaxy-stars');
+      if (!host) return;
+      const cols = 14, rows = 10;
+      const variants = ['', 'dim', 'cyan', 'rose'];
+      let i = 0;
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const star = document.createElement('span');
+          const variant = variants[i % variants.length];
+          star.className = 'galaxy-star' + (variant ? ' ' + variant : '');
+          const jitterX = (Math.random() - 0.5) * (100 / cols) * 0.55;
+          const jitterY = (Math.random() - 0.5) * (100 / rows) * 0.55;
+          star.style.left = ((col + 0.5) / cols) * 100 + jitterX + '%';
+          star.style.top = ((row + 0.5) / rows) * 100 + jitterY + '%';
+          const size = 1.2 + Math.random() * 2.4;
+          star.style.width = size + 'px';
+          star.style.height = size + 'px';
+          star.style.setProperty('--opacity', (0.35 + Math.random() * 0.65).toFixed(2));
+          star.style.setProperty('--dur', (2.2 + Math.random() * 3.5).toFixed(2) + 's');
+          star.style.setProperty('--delay', (Math.random() * 4).toFixed(2) + 's');
+          host.appendChild(star);
+          i++;
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
